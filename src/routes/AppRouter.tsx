@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { routes } from './paths';
-import AppLayout from '../ui/AppLayout/AppLayout';
+import AppLayout from '../components/shared/AppLayout/AppLayout';
 
 export function AppRouter() {
   return (
