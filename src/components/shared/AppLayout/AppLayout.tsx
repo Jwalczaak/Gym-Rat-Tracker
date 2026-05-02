@@ -15,7 +15,6 @@ const AppLayout: React.FC = () => {
       <main className="overflow-auto bg-gray-50 p-[4rem_4.8rem_6.4rem]">
         <div className="mx-auto flex max-w-480 flex-col gap-[3.2rem]">
           app layout
-          <Button onClick={() => alert('clicked!')}>Click me</Button>
           <Outlet />
         </div>
       </main>
