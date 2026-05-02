@@ -1,7 +1,6 @@
 'use client';
 
-import * as React from 'react';
-import { addDays, format } from 'date-fns';
+import { format } from 'date-fns';
 import { CalendarIcon } from 'lucide-react';
 import { type DateRange } from 'react-day-picker';
 
@@ -14,12 +13,13 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 
-export function DatePicker() {
-  const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(new Date().getFullYear(), 0, 20),
-    to: addDays(new Date(new Date().getFullYear(), 0, 20), 20),
-  });
-
+export function DatePicker({
+  onSelect,
+  selectedDate,
+}: {
+  onSelect: (selectedDate: DateRange | undefined) => void;
+  selectedDate: DateRange | undefined;
+}) {
   return (
     <Field className="mx-auto w-60">
       <FieldLabel htmlFor="date-picker-range">Date Picker Range</FieldLabel>
@@ -31,14 +31,14 @@ export function DatePicker() {
             className="justify-start px-2.5 font-normal"
           >
             <CalendarIcon />
-            {date?.from ? (
-              date.to ? (
+            {selectedDate?.from ? (
+              selectedDate.to ? (
                 <>
-                  {format(date.from, 'LLL dd, y')} -{' '}
-                  {format(date.to, 'LLL dd, y')}
+                  {format(selectedDate.from, 'LLL dd, y')} -{' '}
+                  {format(selectedDate.to, 'LLL dd, y')}
                 </>
               ) : (
-                format(date.from, 'LLL dd, y')
+                format(selectedDate.from, 'LLL dd, y')
               )
             ) : (
               <span>Pick a date</span>
@@ -48,9 +48,9 @@ export function DatePicker() {
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="range"
-            defaultMonth={date?.from}
-            selected={date}
-            onSelect={setDate}
+            defaultMonth={selectedDate?.from}
+            selected={selectedDate}
+            onSelect={onSelect}
             numberOfMonths={2}
           />
         </PopoverContent>
