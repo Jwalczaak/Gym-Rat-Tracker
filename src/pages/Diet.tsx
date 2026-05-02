@@ -1,5 +1,11 @@
 import { DatePicker } from '@/components/shared/DatePicker/DatePicker';
-import { Card, CardContent } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardTitle,
+  CardHeader,
+  CardFooter,
+} from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -30,16 +36,52 @@ const Diet: React.FC = () => {
         opts={{
           align: 'start',
         }}
-        className="w-full max-w-[12rem] sm:max-w-xs md:max-w-sm"
+        className="w-full"
       >
         <CarouselContent>
-          {Array.from({ length: 7 }).map((_, index) => (
+          {Array.from([
+            'Poniedziałek',
+            'Wtorek',
+            'Środa',
+            'Czwartek',
+            'Piątek',
+            'Sobota',
+            'Niedziela',
+          ]).map((day, index) => (
             <CarouselItem key={index} className="basis-1/2 lg:basis-1/5">
               <div className="p-1">
                 <Card>
-                  <CardContent className="flex aspect-square items-center justify-center p-6">
-                    <span className="text-3xl font-semibold">{index + 1}</span>
-                  </CardContent>
+                  <CardHeader className="flex aspect-square items-center justify-center p-6">
+                    <span className="text-3xl font-semibold">{day}</span>
+                  </CardHeader>
+                  <Card>
+                    <CardTitle className="flex aspect-square items-center justify-center p-6">
+                      <span className="text-3xl font-semibold">Breakfast</span>
+                    </CardTitle>
+                    <CardContent>
+                      <span className="text-2xl font-medium">Spaghetti</span>
+                    </CardContent>
+                    <CardFooter>
+                      <span className="text-2xl font-medium">
+                        kcal: 850, protein:46, carb:103, fat:28
+                      </span>
+                    </CardFooter>
+                  </Card>
+                  <Card>
+                    <CardTitle className="flex aspect-square items-center justify-center p-6">
+                      <span className="text-3xl font-semibold">Lunch</span>
+                    </CardTitle>
+                  </Card>
+                  <Card>
+                    <CardTitle className="flex aspect-square items-center justify-center p-6">
+                      <span className="text-3xl font-semibold">Dinner</span>
+                    </CardTitle>
+                  </Card>
+                  <Card>
+                    <CardTitle className="flex aspect-square items-center justify-center p-6">
+                      <span className="text-3xl font-semibold">Snack</span>
+                    </CardTitle>
+                  </Card>
                 </Card>
               </div>
             </CarouselItem>
