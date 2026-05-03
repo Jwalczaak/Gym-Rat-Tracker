@@ -4,7 +4,7 @@
     "target": "es2023",
     "lib": ["ES2023", "DOM"],
     "module": "esnext",
-    "types": ["vite/client"],
+    "types": ["vite/client", "@supabase/supabase-js"],
     "skipLibCheck": true,
 
     "paths": {
@@ -26,5 +26,5 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "vite.config.ts", "eslint.config.js"]
+  "include": ["src", "vite.config.ts", "eslint.config.js", "src/vite-env.d.ts"]
 }
