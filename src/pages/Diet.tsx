@@ -13,8 +13,9 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import React from 'react';
+import React, { use, useEffect } from 'react';
 import type { DateRange } from 'react-day-picker';
+import { fetchDietPlan } from '../services/Diet/apiDiet';
 
 const Diet: React.FC = () => {
   const dateInterval: DateRange = {
@@ -28,6 +29,18 @@ const Diet: React.FC = () => {
     console.log(selectedDate);
     setDate(selectedDate);
   }
+
+  useEffect(() => {
+    if (date) {
+      fetchDietPlan(date.from!, date.to!)
+        .then((data) => {
+          console.log('Fetched diet plan:', data);
+        })
+        .catch((error) => {
+          console.error('Error fetching diet plan:', error);
+        });
+    }
+  }, [date]);
 
   return (
     <>
