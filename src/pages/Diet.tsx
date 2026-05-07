@@ -14,23 +14,31 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useDiets } from '@/features/diet/useDiets';
-import React from 'react';
+import React, { useState } from 'react';
 
 import type { DateRange } from 'react-day-picker';
+import { useSearchParams } from 'react-router-dom';
 
 const Diet: React.FC = () => {
-  const dateInterval: DateRange = {
-    from: new Date('2026-05-03'),
-    to: new Date(),
+  const [searchParams, setSearchParams] = useSearchParams();
+  const initialDate: DateRange = {
+    from: new Date(searchParams.get('dateFrom') ?? new Date()),
+    to: new Date(searchParams.get('dateTo') ?? new Date()),
   };
 
-  const { isLoading, dietPlan } = useDiets();
+  const [date, setDate] = useState<DateRange | undefined>(initialDate);
 
-  const [date, setDate] = React.useState<DateRange | undefined>(dateInterval);
+  const { dietPlan } = useDiets(initialDate.from!, initialDate.to!);
 
-  function handleDateSelect(selectedDate: DateRange | undefined) {
-    console.log(selectedDate);
-    setDate(selectedDate);
+  function handleDateSelect(selected: DateRange | undefined): void {
+    setDate(selected);
+
+    if (!selected?.from || !selected?.to) return;
+
+    setSearchParams({
+      dateFrom: selected.from.toISOString(),
+      dateTo: selected.to.toISOString(),
+    });
   }
 
   return (

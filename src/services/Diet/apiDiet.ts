@@ -1,10 +1,10 @@
 import type { DateRange } from 'react-day-picker';
 import { supabase } from '../supabase';
 
-export async function fetchDietPlan() {
+export async function fetchDietPlan(dateFrom: Date, dateTo: Date) {
   const dateInterval: DateRange = {
-    from: new Date('2026-05-03'),
-    to: new Date(),
+    from: dateFrom,
+    to: dateTo,
   };
 
   const { data, error } = await supabase
