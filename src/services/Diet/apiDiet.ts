@@ -24,5 +24,15 @@ export async function fetchDietPlan(dateFrom: Date, dateTo: Date) {
     throw new Error('Cabins could not be loaded');
   }
 
-  return data;
+  const flat = data?.map((row) => {
+    const meal = row.meals;
+
+    return {
+      log_date: row.log_date,
+      meal_type: meal.meal_type,
+      name: meal?.name,
+    };
+  });
+
+  return flat || [];
 }

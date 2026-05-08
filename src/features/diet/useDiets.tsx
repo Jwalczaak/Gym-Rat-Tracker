@@ -4,7 +4,7 @@ import { fetchDietPlan } from '../../services/Diet/apiDiet';
 export function useDiets(dateFrom: Date, dateTo: Date) {
   const {
     isLoading,
-    data: dietPlan,
+    data: dietPlan = [],
     error,
   } = useQuery({
     queryKey: ['dietPlan', dateFrom.toISOString(), dateTo.toISOString()],
