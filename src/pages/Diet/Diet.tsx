@@ -14,13 +14,11 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { useDiets } from '@/features/diet/useDiets';
-import { dayliMeals } from '@/utils/constants';
-
-import { eachDayOfInterval, format } from 'date-fns';
 import React, { useState } from 'react';
-
 import type { DateRange } from 'react-day-picker';
-import { data, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
+import type { GroupedMeals } from './diet.types';
+import { mapIntervalToWeekDays } from '@/utils/helper';
 
 const Diet: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -44,35 +42,42 @@ const Diet: React.FC = () => {
     });
   }
 
-  type Meal = {
-    name: string;
-    type: string;
-  };
+  const days =
+    date && date.from && date.to
+      ? mapIntervalToWeekDays(date!.from!, date!.to!)
+      : [];
 
-  type GroupedItem = {
-    date: string;
-    weekDay: string;
-    dailyMeals: Meal[];
-  };
+  const groupedPlanByName = days.map((day) => {
+    const dayMeals = dietPlan.filter((item) => item.log_date === day.date);
 
-  type GroupedPlan = Record<string, GroupedItem>;
-
-  const groupedPlanByWeekDay = Object.values(
-    dietPlan.reduce<GroupedPlan>((acc, { log_date, meal_type, name }) => {
-      if (!acc[log_date]) {
-        acc[log_date] = {
-          date: log_date,
-          weekDay: format(log_date, 'EEEE'),
-          dailyMeals: [],
+    const groupedByName = dayMeals.reduce<GroupedMeals>((acc, item) => {
+      if (!acc[item.name]) {
+        acc[item.name] = {
+          name: item.name,
+          type: item.meal_type,
         };
       }
-      acc[log_date].dailyMeals.push({ name: name, type: meal_type });
 
       return acc;
-    }, {}),
-  ).filter((group) => group.dailyMeals.length > 1);
+    }, {});
 
-  console.log(groupedPlanByWeekDay);
+    const meals = Object.values(groupedByName);
+
+    const defaultMeals = [
+      { name: 'not selected', type: 'breakfast' },
+      { name: 'not selected', type: 'lunch' },
+      { name: 'not selected', type: 'dinner' },
+      { name: 'not selected', type: 'snack' },
+    ];
+
+    return {
+      date: day.date,
+      weekDay: day.dayName,
+      meals: meals.length > 0 ? meals : defaultMeals,
+    };
+  });
+
+  console.log(groupedPlanByName);
 
   return (
     <>
@@ -84,7 +89,7 @@ const Diet: React.FC = () => {
         className="w-full"
       >
         <CarouselContent>
-          {groupedPlanByWeekDay.map((plan, index) => (
+          {groupedPlanByName.map((plan, index) => (
             <CarouselItem key={index} className="basis-1/2 lg:basis-1/5">
               <div className="p-1">
                 <Card>
@@ -94,8 +99,8 @@ const Diet: React.FC = () => {
                       <span>{plan.weekDay}</span>
                     </span>
                   </CardHeader>
-                  {plan.dailyMeals.map((meal) => (
-                    <Card key={meal.name}>
+                  {plan.meals.map((meal) => (
+                    <Card key={`${meal.name}-${meal.type}-${index}`}>
                       <CardTitle className="flex aspect-square items-center justify-center p-6">
                         <span className="text-3xl font-semibold">
                           {meal.type}

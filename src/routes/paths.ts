@@ -1,4 +1,4 @@
-import Diet from '../pages/Diet';
+import Diet from '../pages/Diet/Diet';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Settings from '../pages/Settings';
