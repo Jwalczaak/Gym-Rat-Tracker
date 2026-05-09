@@ -19,6 +19,7 @@ import type { DateRange } from 'react-day-picker';
 import { useSearchParams } from 'react-router-dom';
 import type { GroupedMeals } from './diet.types';
 import { mapIntervalToWeekDays } from '@/utils/helper';
+import { Weight } from 'lucide-react';
 
 const Diet: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,7 +55,12 @@ const Diet: React.FC = () => {
       if (!acc[item.name]) {
         acc[item.name] = {
           name: item.name,
-          type: item.meal_type,
+          meal_type: item.meal_type,
+          weight: item.weight,
+          kcal: item.kcal,
+          protein: item.protein,
+          carbs: item.carbs,
+          fat: item.fat,
         };
       }
 
@@ -64,10 +70,42 @@ const Diet: React.FC = () => {
     const meals = Object.values(groupedByName);
 
     const defaultMeals = [
-      { name: 'not selected', type: 'breakfast' },
-      { name: 'not selected', type: 'lunch' },
-      { name: 'not selected', type: 'dinner' },
-      { name: 'not selected', type: 'snack' },
+      {
+        name: 'not selected',
+        meal_type: 'breakfast',
+        weight: 0,
+        kcal: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      },
+      {
+        name: 'not selected',
+        meal_type: 'lunch',
+        weight: 0,
+        kcal: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      },
+      {
+        name: 'not selected',
+        meal_type: 'dinner',
+        weight: 0,
+        kcal: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      },
+      {
+        name: 'not selected',
+        meal_type: 'snack',
+        weight: 0,
+        kcal: 0,
+        protein: 0,
+        carbs: 0,
+        fat: 0,
+      },
     ];
 
     return {
@@ -76,8 +114,6 @@ const Diet: React.FC = () => {
       meals: meals.length > 0 ? meals : defaultMeals,
     };
   });
-
-  console.log(groupedPlanByName);
 
   return (
     <>
@@ -100,10 +136,10 @@ const Diet: React.FC = () => {
                     </span>
                   </CardHeader>
                   {plan.meals.map((meal) => (
-                    <Card key={`${meal.name}-${meal.type}-${index}`}>
+                    <Card key={`${meal.name}-${meal.meal_type}-${index}`}>
                       <CardTitle className="flex aspect-square items-center justify-center p-6">
                         <span className="text-3xl font-semibold">
-                          {meal.type}
+                          {meal.meal_type}
                         </span>
                       </CardTitle>
                       <CardContent>
@@ -113,7 +149,8 @@ const Diet: React.FC = () => {
                       </CardContent>
                       <CardFooter>
                         <span className="text-2xl font-medium">
-                          kcal: 850, protein:46, carb:103, fat:28
+                          kcal: {meal.kcal}, protein: {meal.protein}, carb:{' '}
+                          {meal.carbs}, fat: {meal.fat}
                         </span>
                       </CardFooter>
                     </Card>

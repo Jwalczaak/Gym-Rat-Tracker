@@ -1,1 +1,38 @@
-export const dayliMeals: string[] = ['Breakfast', 'Lunch', 'Dinner', 'Snack'];
+export const defaultMeals = [
+  {
+    name: 'not selected',
+    meal_type: 'breakfast',
+    weight: 0,
+    kcal: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+  },
+  {
+    name: 'not selected',
+    meal_type: 'lunch',
+    weight: 0,
+    kcal: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+  },
+  {
+    name: 'not selected',
+    meal_type: 'dinner',
+    weight: 0,
+    kcal: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+  },
+  {
+    name: 'not selected',
+    meal_type: 'snack',
+    weight: 0,
+    kcal: 0,
+    protein: 0,
+    carbs: 0,
+    fat: 0,
+  },
+] as const;

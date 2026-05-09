@@ -21,6 +21,7 @@ export type Database = {
           id: string
           log_date: string
           meal_id: string
+          weight: number
         }
         Insert: {
           created_at?: string
@@ -28,6 +29,7 @@ export type Database = {
           id?: string
           log_date: string
           meal_id: string
+          weight: number
         }
         Update: {
           created_at?: string
@@ -35,6 +37,7 @@ export type Database = {
           id?: string
           log_date?: string
           meal_id?: string
+          weight?: number
         }
         Relationships: [
           {
@@ -48,24 +51,33 @@ export type Database = {
       }
       meals: {
         Row: {
-          calories: number
+          carbs_per_100g: number
+          fat_per_100g: number
           id: string
+          kcal_per_100g: number
           meal_type: string
           name: string
+          protein_per_100g: number
           sort_order: number
         }
         Insert: {
-          calories?: number
+          carbs_per_100g: number
+          fat_per_100g: number
           id?: string
+          kcal_per_100g: number
           meal_type: string
           name: string
+          protein_per_100g: number
           sort_order?: number
         }
         Update: {
-          calories?: number
+          carbs_per_100g?: number
+          fat_per_100g?: number
           id?: string
+          kcal_per_100g?: number
           meal_type?: string
           name?: string
+          protein_per_100g?: number
           sort_order?: number
         }
         Relationships: []
