@@ -1,11 +1,5 @@
 import { DatePicker } from '@/components/shared/DatePicker/DatePicker';
-import {
-  Card,
-  CardContent,
-  CardTitle,
-  CardHeader,
-  CardFooter,
-} from '@/components/ui/card';
+import { Card, CardContent, CardTitle, CardHeader } from '@/components/ui/card';
 import {
   Carousel,
   CarouselContent,
@@ -20,6 +14,7 @@ import { useSearchParams } from 'react-router-dom';
 import type { GroupedMeals, Meal } from './diet.types';
 import { mapIntervalToWeekDays } from '@/utils/helper';
 import { defaultMeals } from '@/utils/constants';
+import MealCard from '@/features/diet/MealCard/MealCard';
 
 const Diet: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -99,10 +94,10 @@ const Diet: React.FC = () => {
               <div className="flex flex-col gap-4 p-1 lg:gap-6">
                 <Card className="h-40">
                   <CardHeader className="flex items-center justify-center p-6">
-                    <span className="flex flex-col items-center text-3xl font-semibold">
+                    <div className="flex flex-col items-center text-3xl font-semibold">
                       <span>({plan.date})</span>
                       <span>{plan.weekDay}</span>
-                    </span>
+                    </div>
                   </CardHeader>
                 </Card>
                 {plan.meals.map((meal) => (
@@ -116,6 +111,7 @@ const Diet: React.FC = () => {
                       {meal.meals.length > 0 ? (
                         meal.meals.map((m1, index) => (
                           <>
+                            <MealCard />
                             <span
                               key={`${m1.name}-${index}`}
                               className="text-2xl font-medium"
