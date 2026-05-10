@@ -1,38 +1,20 @@
-export const defaultMeals = [
+import type { DietPlanRow } from '@/pages/Diet/diet.types';
+
+export const defaultMeals: DietPlanRow[] = [
   {
-    name: 'not selected',
     meal_type: 'breakfast',
-    weight: 0,
-    kcal: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
+    meals: [],
   },
   {
-    name: 'not selected',
     meal_type: 'lunch',
-    weight: 0,
-    kcal: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
+    meals: [],
   },
   {
-    name: 'not selected',
     meal_type: 'dinner',
-    weight: 0,
-    kcal: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
+    meals: [],
   },
   {
-    name: 'not selected',
     meal_type: 'snack',
-    weight: 0,
-    kcal: 0,
-    protein: 0,
-    carbs: 0,
-    fat: 0,
+    meals: [],
   },
 ] as const;

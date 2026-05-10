@@ -1,5 +1,9 @@
-type DietPlanRow = {
+export type DietPlanRow = {
   meal_type: string;
+  meals: Meal[];
+};
+
+export type Meal = {
   name: string;
   weight: number;
   kcal: number;

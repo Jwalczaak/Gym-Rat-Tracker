@@ -17,7 +17,7 @@ import { useDiets } from '@/features/diet/useDiets';
 import React, { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useSearchParams } from 'react-router-dom';
-import type { GroupedMeals } from './diet.types';
+import type { GroupedMeals, Meal } from './diet.types';
 import { mapIntervalToWeekDays } from '@/utils/helper';
 import { defaultMeals } from '@/utils/constants';
 
@@ -47,20 +47,28 @@ const Diet: React.FC = () => {
     date && date.from && date.to
       ? mapIntervalToWeekDays(date!.from!, date!.to!)
       : [];
-
   const groupedPlanByName = days.map((day) => {
     const dayMeals = dietPlan.filter((item) => item.log_date === day.date);
 
     const groupedByName = dayMeals.reduce<GroupedMeals>((acc, item) => {
-      if (!acc[item.name]) {
-        acc[item.name] = {
-          name: item.name,
+      const meal: Meal = {
+        name: item.name,
+        weight: item.weight,
+        kcal: item.kcal,
+        protein: item.protein,
+        carbs: item.carbs,
+        fat: item.fat,
+      };
+
+      if (!acc[item.meal_type]) {
+        acc[item.meal_type] = {
           meal_type: item.meal_type,
-          weight: item.weight,
-          kcal: item.kcal,
-          protein: item.protein,
-          carbs: item.carbs,
-          fat: item.fat,
+          meals: [meal],
+        };
+      } else {
+        acc[item.meal_type] = {
+          ...acc[item.meal_type],
+          meals: [...acc[item.meal_type].meals, meal],
         };
       }
 
@@ -98,21 +106,40 @@ const Diet: React.FC = () => {
                   </CardHeader>
                 </Card>
                 {plan.meals.map((meal) => (
-                  <Card key={`${meal.name}-${meal.meal_type}-${index}`}>
+                  <Card key={`${meal.meal_type}`}>
                     <CardTitle className="flex items-center justify-center p-6">
                       <span className="text-3xl font-semibold">
                         {meal.meal_type}
                       </span>
                     </CardTitle>
                     <CardContent>
-                      <span className="text-2xl font-medium">{meal.name}</span>
+                      {meal.meals.length > 0 ? (
+                        meal.meals.map((m1, index) => (
+                          <>
+                            <span
+                              key={`${m1.name}-${index}`}
+                              className="text-2xl font-medium"
+                            >
+                              {m1.name}
+                            </span>
+                            <span className="text-2xl font-medium">
+                              kcal: {m1.kcal}, protein: {m1.protein}, carb:{' '}
+                              {m1.carbs}, fat: {m1.fat}
+                            </span>
+                          </>
+                        ))
+                      ) : (
+                        <span className="text-2xl font-medium">
+                          not selected
+                        </span>
+                      )}
                     </CardContent>
-                    <CardFooter>
+                    {/* <CardFooter>
                       <span className="text-2xl font-medium">
                         kcal: {meal.kcal}, protein: {meal.protein}, carb:{' '}
                         {meal.carbs}, fat: {meal.fat}
                       </span>
-                    </CardFooter>
+                    </CardFooter> */}
                   </Card>
                 ))}
               </div>
