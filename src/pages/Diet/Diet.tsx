@@ -19,7 +19,7 @@ import type { DateRange } from 'react-day-picker';
 import { useSearchParams } from 'react-router-dom';
 import type { GroupedMeals } from './diet.types';
 import { mapIntervalToWeekDays } from '@/utils/helper';
-import { Weight } from 'lucide-react';
+import { defaultMeals } from '@/utils/constants';
 
 const Diet: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -69,45 +69,6 @@ const Diet: React.FC = () => {
 
     const meals = Object.values(groupedByName);
 
-    const defaultMeals = [
-      {
-        name: 'not selected',
-        meal_type: 'breakfast',
-        weight: 0,
-        kcal: 0,
-        protein: 0,
-        carbs: 0,
-        fat: 0,
-      },
-      {
-        name: 'not selected',
-        meal_type: 'lunch',
-        weight: 0,
-        kcal: 0,
-        protein: 0,
-        carbs: 0,
-        fat: 0,
-      },
-      {
-        name: 'not selected',
-        meal_type: 'dinner',
-        weight: 0,
-        kcal: 0,
-        protein: 0,
-        carbs: 0,
-        fat: 0,
-      },
-      {
-        name: 'not selected',
-        meal_type: 'snack',
-        weight: 0,
-        kcal: 0,
-        protein: 0,
-        carbs: 0,
-        fat: 0,
-      },
-    ];
-
     return {
       date: day.date,
       weekDay: day.dayName,
@@ -124,38 +85,36 @@ const Diet: React.FC = () => {
         }}
         className="w-full"
       >
-        <CarouselContent>
+        <CarouselContent className="mx-auto flex justify-center gap-4 lg:gap-6">
           {groupedPlanByName.map((plan, index) => (
             <CarouselItem key={index} className="basis-1/2 lg:basis-1/5">
-              <div className="p-1">
-                <Card>
-                  <CardHeader className="flex aspect-square items-center justify-center p-6">
+              <div className="flex flex-col gap-4 p-1 lg:gap-6">
+                <Card className="h-40">
+                  <CardHeader className="flex items-center justify-center p-6">
                     <span className="flex flex-col items-center text-3xl font-semibold">
                       <span>({plan.date})</span>
                       <span>{plan.weekDay}</span>
                     </span>
                   </CardHeader>
-                  {plan.meals.map((meal) => (
-                    <Card key={`${meal.name}-${meal.meal_type}-${index}`}>
-                      <CardTitle className="flex aspect-square items-center justify-center p-6">
-                        <span className="text-3xl font-semibold">
-                          {meal.meal_type}
-                        </span>
-                      </CardTitle>
-                      <CardContent>
-                        <span className="text-2xl font-medium">
-                          {meal.name}
-                        </span>
-                      </CardContent>
-                      <CardFooter>
-                        <span className="text-2xl font-medium">
-                          kcal: {meal.kcal}, protein: {meal.protein}, carb:{' '}
-                          {meal.carbs}, fat: {meal.fat}
-                        </span>
-                      </CardFooter>
-                    </Card>
-                  ))}
                 </Card>
+                {plan.meals.map((meal) => (
+                  <Card key={`${meal.name}-${meal.meal_type}-${index}`}>
+                    <CardTitle className="flex items-center justify-center p-6">
+                      <span className="text-3xl font-semibold">
+                        {meal.meal_type}
+                      </span>
+                    </CardTitle>
+                    <CardContent>
+                      <span className="text-2xl font-medium">{meal.name}</span>
+                    </CardContent>
+                    <CardFooter>
+                      <span className="text-2xl font-medium">
+                        kcal: {meal.kcal}, protein: {meal.protein}, carb:{' '}
+                        {meal.carbs}, fat: {meal.fat}
+                      </span>
+                    </CardFooter>
+                  </Card>
+                ))}
               </div>
             </CarouselItem>
           ))}
