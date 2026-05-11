@@ -11,7 +11,7 @@ import { useDiets } from '@/features/diet/useDiets';
 import React, { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useSearchParams } from 'react-router-dom';
-import type { GroupedMeals, Meal } from './diet.types';
+import type { GroupedMeals, Meal } from '../../types/meal';
 import { mapIntervalToWeekDays } from '@/utils/helper';
 import { defaultMeals } from '@/utils/constants';
 import MealCard from '@/features/diet/MealCard/MealCard';
@@ -111,7 +111,11 @@ const Diet: React.FC = () => {
                       {meal.meals.length > 0 ? (
                         meal.meals.map((m1, index) => (
                           <>
-                            <MealCard />
+                            <MealCard
+                              meal={m1}
+                              onEdit={(meal) => console.log('Edit:', meal)}
+                              onDelete={(id) => console.log('Delete:', id)}
+                            />
                             <span
                               key={`${m1.name}-${index}`}
                               className="text-2xl font-medium"

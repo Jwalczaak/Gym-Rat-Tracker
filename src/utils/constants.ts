@@ -1,4 +1,4 @@
-import type { DietPlanRow } from '@/pages/Diet/diet.types';
+import type { DietPlanRow } from '@/types/meal';
 
 export const defaultMeals: DietPlanRow[] = [
   {
