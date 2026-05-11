@@ -107,7 +107,7 @@ const Diet: React.FC = () => {
                         {meal.meal_type}
                       </span>
                     </CardTitle>
-                    <CardContent>
+                    <CardContent className="flex flex-col gap-6">
                       {meal.meals.length > 0 ? (
                         meal.meals.map((m1, index) => (
                           <>
@@ -116,7 +116,7 @@ const Diet: React.FC = () => {
                               onEdit={(meal) => console.log('Edit:', meal)}
                               onDelete={(id) => console.log('Delete:', id)}
                             />
-                            <span
+                            {/* <span
                               key={`${m1.name}-${index}`}
                               className="text-2xl font-medium"
                             >
@@ -125,7 +125,7 @@ const Diet: React.FC = () => {
                             <span className="text-2xl font-medium">
                               kcal: {m1.kcal}, protein: {m1.protein}, carb:{' '}
                               {m1.carbs}, fat: {m1.fat}
-                            </span>
+                            </span> */}
                           </>
                         ))
                       ) : (
