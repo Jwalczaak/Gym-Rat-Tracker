@@ -15,6 +15,7 @@ import type { GroupedMeals, Meal } from '../../types/meal';
 import { mapIntervalToWeekDays } from '@/utils/helper';
 import { defaultMeals } from '@/utils/constants';
 import MealCard from '@/features/diet/MealCard/MealCard';
+import ToggleCard from '@/components/shared/ToggleCard/ToggleCard';
 
 const Diet: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -100,32 +101,24 @@ const Diet: React.FC = () => {
                     </div>
                   </CardHeader>
                 </Card>
+
                 {plan.meals.map((meal) => (
-                  <Card key={`${meal.meal_type}`}>
+                  <ToggleCard key={`${meal.meal_type}`}>
                     <CardTitle className="flex items-center justify-center p-6">
                       <span className="text-3xl font-semibold">
                         {meal.meal_type}
                       </span>
                     </CardTitle>
-                    <CardContent className="flex flex-col gap-6">
+                    <CardContent className="flex w-full flex-col gap-6">
                       {meal.meals.length > 0 ? (
                         meal.meals.map((m1, index) => (
                           <>
                             <MealCard
+                              key={index}
                               meal={m1}
                               onEdit={(meal) => console.log('Edit:', meal)}
                               onDelete={(id) => console.log('Delete:', id)}
                             />
-                            {/* <span
-                              key={`${m1.name}-${index}`}
-                              className="text-2xl font-medium"
-                            >
-                              {m1.name}
-                            </span>
-                            <span className="text-2xl font-medium">
-                              kcal: {m1.kcal}, protein: {m1.protein}, carb:{' '}
-                              {m1.carbs}, fat: {m1.fat}
-                            </span> */}
                           </>
                         ))
                       ) : (
@@ -140,7 +133,7 @@ const Diet: React.FC = () => {
                         {meal.carbs}, fat: {meal.fat}
                       </span>
                     </CardFooter> */}
-                  </Card>
+                  </ToggleCard>
                 ))}
               </div>
             </CarouselItem>

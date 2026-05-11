@@ -47,19 +47,18 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
   ];
 
   return (
-    <Card className="h-45 gap-4 bg-gray-100">
+    <Card className="h-45 w-full gap-4 bg-gray-100">
       <CardContent className="content flex h-full w-full items-center justify-between font-semibold">
-        <div className="flex h-full flex-col justify-between">
+        <div className="flex h-full w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
             <span className="text-2xl">{meal.name}</span>
             <span className="text-sm font-normal">{meal.weight}g</span>
           </div>
 
-          <div className="flex gap-3">
+          <div className="flex w-full gap-12">
             <div className="chart-container flex items-center gap-2 font-thin">
               <Chart type="donut" width={20} height={30} data={proteinData} />
               <span className="text-sm font-normal">
-                {' '}
                 {proteinData[0].value}g
               </span>
             </div>
@@ -69,10 +68,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
             </div>{' '}
             <div className="chart-container flex items-center gap-2 font-thin">
               <Chart type="donut" width={20} height={30} data={carbsData} />
-              <span className="text-sm font-normal">
-                {' '}
-                {carbsData[0].value}g
-              </span>
+              <span className="text-sm font-normal">{carbsData[0].value}g</span>
             </div>
           </div>
         </div>
