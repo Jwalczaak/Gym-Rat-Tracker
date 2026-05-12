@@ -9,14 +9,9 @@ const ToggleCard = ({ children }: { children: React.ReactNode }) => {
   const toggle = () => setIsToggled((prev) => !prev);
 
   return (
-    <Card className="p-4">
-      <div
-        className={`grid overflow-hidden transition-all duration-300 ease-in-out ${isToggled ? 'mb-3 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'} `}
-      >
-        <div className="min-h-0">{children}</div>
-      </div>
-
-      <div className="flex justify-start">
+    <Card className="items-between flex w-full flex-row items-end gap-x-0 p-6">
+      {/* Toggle button */}
+      <div className="flex justify-end">
         <Button
           variant="outline"
           size="icon"
@@ -24,9 +19,22 @@ const ToggleCard = ({ children }: { children: React.ReactNode }) => {
           onClick={toggle}
         >
           <IoIosArrowDropdown
-            className={`size-6 transition-transform duration-300 ${isToggled ? 'rotate-180' : 'rotate-0'} `}
+            className={`size-6 transition-transform duration-300 ${
+              isToggled ? 'rotate-180' : 'rotate-0'
+            }`}
           />
         </Button>
+      </div>
+
+      {/* Animated content */}
+      <div
+        className="grid w-full transition-all duration-300 ease-in-out"
+        style={{
+          gridTemplateRows: isToggled ? '1fr' : '0fr',
+          opacity: isToggled ? 1 : 0,
+        }}
+      >
+        <div className="min-h-0 overflow-hidden">{children}</div>
       </div>
     </Card>
   );
