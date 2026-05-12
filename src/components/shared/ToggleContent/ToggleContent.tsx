@@ -1,16 +1,14 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { IoIosArrowDropdown } from 'react-icons/io';
 
-const ToggleCard = ({ children }: { children: React.ReactNode }) => {
+const ToggleContent = ({ children }: { children: React.ReactNode }) => {
   const [isToggled, setIsToggled] = React.useState(false);
 
   const toggle = () => setIsToggled((prev) => !prev);
 
   return (
-    <Card className="items-between flex w-full flex-row items-end gap-x-0 p-6">
-      {/* Toggle button */}
+    <div className="items-between flex w-full flex-row items-end gap-x-0 p-6">
       <div className="flex justify-end">
         <Button
           variant="outline"
@@ -26,7 +24,6 @@ const ToggleCard = ({ children }: { children: React.ReactNode }) => {
         </Button>
       </div>
 
-      {/* Animated content */}
       <div
         className="grid w-full transition-all duration-300 ease-in-out"
         style={{
@@ -36,8 +33,8 @@ const ToggleCard = ({ children }: { children: React.ReactNode }) => {
       >
         <div className="min-h-0 overflow-hidden">{children}</div>
       </div>
-    </Card>
+    </div>
   );
 };
 
-export default ToggleCard;
+export default ToggleContent;

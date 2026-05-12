@@ -12,10 +12,11 @@ import React, { useState } from 'react';
 import type { DateRange } from 'react-day-picker';
 import { useSearchParams } from 'react-router-dom';
 import type { GroupedMeals, Meal } from '../../types/meal';
-import { mapIntervalToWeekDays } from '@/utils/helper';
+import { countChartMacroData, mapIntervalToWeekDays } from '@/utils/helper';
 import { defaultMeals } from '@/utils/constants';
 import MealCard from '@/features/diet/MealCard/MealCard';
-import ToggleCard from '@/components/shared/ToggleCard/ToggleCard';
+import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
+import Chart from '@/components/shared/ Chart/Chart';
 
 const Diet: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -59,11 +60,19 @@ const Diet: React.FC = () => {
       if (!acc[item.meal_type]) {
         acc[item.meal_type] = {
           meal_type: item.meal_type,
+          mealKcal: item.kcal,
+          mealProtein: item.protein,
+          mealCarbs: item.carbs,
+          mealFat: item.fat,
           meals: [meal],
         };
       } else {
         acc[item.meal_type] = {
           ...acc[item.meal_type],
+          mealKcal: acc[item.meal_type].mealKcal + item.kcal,
+          mealProtein: acc[item.meal_type].mealProtein + item.protein,
+          mealCarbs: acc[item.meal_type].mealCarbs + item.carbs,
+          mealFat: acc[item.meal_type].mealFat + item.fat,
           meals: [...acc[item.meal_type].meals, meal],
         };
       }
@@ -79,6 +88,8 @@ const Diet: React.FC = () => {
       meals: meals.length > 0 ? meals : defaultMeals,
     };
   });
+
+  console.log(groupedPlanByName);
 
   return (
     <>
@@ -103,37 +114,101 @@ const Diet: React.FC = () => {
                 </Card>
 
                 {plan.meals.map((meal) => (
-                  <ToggleCard key={`${meal.meal_type}`}>
-                    <CardTitle className="flex items-center justify-center p-6">
-                      <span className="text-3xl font-semibold">
-                        {meal.meal_type}
-                      </span>
-                    </CardTitle>
-                    <CardContent className="flex w-full flex-col gap-6">
-                      {meal.meals.length > 0 ? (
-                        meal.meals.map((m1, index) => (
-                          <>
-                            <MealCard
-                              key={index}
-                              meal={m1}
-                              onEdit={(meal) => console.log('Edit:', meal)}
-                              onDelete={(id) => console.log('Delete:', id)}
-                            />
-                          </>
-                        ))
-                      ) : (
-                        <span className="text-2xl font-medium">
-                          not selected
+                  <>
+                    <Card>
+                      <CardTitle className="flex items-center justify-center p-6">
+                        <span className="text-3xl font-semibold">
+                          {meal.meal_type}
                         </span>
-                      )}
-                    </CardContent>
-                    {/* <CardFooter>
+                      </CardTitle>
+                      {/* To do check if meal.meals is empty and show not
+                      selected, otherwise show meals with toggle */}
+                      <ToggleCard key={`${meal.meal_type}`}>
+                        <CardContent className="flex w-full flex-col gap-6">
+                          {meal.meals.length > 0 ? (
+                            meal.meals.map((m1, index) => (
+                              <>
+                                <MealCard
+                                  key={index}
+                                  meal={m1}
+                                  onEdit={(meal) => console.log('Edit:', meal)}
+                                  onDelete={(id) => console.log('Delete:', id)}
+                                />
+                              </>
+                            ))
+                          ) : (
+                            <span className="text-2xl font-medium">
+                              not selected
+                            </span>
+                          )}
+                        </CardContent>
+                        {/* <CardFooter>
                       <span className="text-2xl font-medium">
                         kcal: {meal.kcal}, protein: {meal.protein}, carb:{' '}
                         {meal.carbs}, fat: {meal.fat}
                       </span>
                     </CardFooter> */}
-                  </ToggleCard>
+                      </ToggleCard>
+
+                      <div className="flex w-full gap-12 px-6">
+                        <div className="chart-container flex items-center gap-2 font-thin">
+                          <Chart
+                            type="donut"
+                            width={20}
+                            height={30}
+                            data={
+                              countChartMacroData({
+                                protein: meal.mealProtein,
+                                fat: meal.mealFat,
+                                carbs: meal.mealCarbs,
+                                kcal: meal.mealKcal,
+                              }).proteinData
+                            }
+                          />
+                          <span className="text-sm font-normal">
+                            {meal.mealProtein}g
+                          </span>
+                        </div>
+                        <div className="chart-container flex items-center gap-2 font-thin">
+                          <Chart
+                            type="donut"
+                            width={20}
+                            height={30}
+                            data={
+                              countChartMacroData({
+                                protein: meal.mealProtein,
+                                fat: meal.mealFat,
+                                carbs: meal.mealCarbs,
+                                kcal: meal.mealKcal,
+                              }).fatData
+                            }
+                          />
+                          <span className="text-sm font-normal">
+                            {' '}
+                            {meal.mealFat}g
+                          </span>
+                        </div>{' '}
+                        <div className="chart-container flex items-center gap-2 font-thin">
+                          <Chart
+                            type="donut"
+                            width={20}
+                            height={30}
+                            data={
+                              countChartMacroData({
+                                protein: meal.mealProtein,
+                                fat: meal.mealFat,
+                                carbs: meal.mealCarbs,
+                                kcal: meal.mealKcal,
+                              }).carbsData
+                            }
+                          />
+                          <span className="text-sm font-normal">
+                            {meal.mealCarbs}g
+                          </span>
+                        </div>
+                      </div>
+                    </Card>
+                  </>
                 ))}
               </div>
             </CarouselItem>
