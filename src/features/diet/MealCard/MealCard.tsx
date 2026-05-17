@@ -26,17 +26,17 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
 
           <div className="flex w-full gap-12">
             <div className="chart-container flex items-center gap-2 font-thin">
-              <Chart type="donut" width={20} height={30} data={proteinData} />
+              {/* <Chart type="donut" width={20} height={30} data={proteinData} /> */}
               <span className="text-sm font-normal">
                 {proteinData[0].value}g
               </span>
             </div>
             <div className="chart-container flex items-center gap-2 font-thin">
-              <Chart type="donut" width={20} height={30} data={fatData} />
+              {/* <Chart type="donut" width={20} height={30} data={fatData} /> */}
               <span className="text-sm font-normal"> {fatData[0].value}g</span>
             </div>{' '}
             <div className="chart-container flex items-center gap-2 font-thin">
-              <Chart type="donut" width={20} height={30} data={carbsData} />
+              {/* <Chart type="donut" width={20} height={30} data={carbsData} /> */}
               <span className="text-sm font-normal">{carbsData[0].value}g</span>
             </div>
           </div>

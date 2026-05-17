@@ -18,6 +18,8 @@ export function mapIntervalToWeekDays(dateFrom: Date, dateTo: Date) {
 export function countChartMacroData(meal: MealCount): MacroChartData {
   const summedMacros: number = meal.protein + meal.fat + meal.carbs;
 
+  console.log('summed', summedMacros);
+
   return {
     proteinData: [
       { name: 'protein', value: meal.protein, fill: MACRO_COLORS.protein },

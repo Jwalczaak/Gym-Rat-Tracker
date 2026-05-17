@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Logo: React.FC = () => {
-  return <div className="h-40">Logo Will be here</div>;
+  return <img src="/logo-lockup.svg" alt="Logo" className="h-14" />;
 };
 
 export default Logo;
