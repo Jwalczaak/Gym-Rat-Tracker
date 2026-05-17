@@ -92,9 +92,16 @@ const Diet: React.FC = () => {
 
   return (
     <>
-      <DatePicker selectedDate={date} onSelect={handleDateSelect} />
+      <div className="flex flex-col gap-3 px-20">
+        <h1>Diet</h1>
+        <span className="text-muted-foreground text-sm">
+          Wednesday, March 12, 2025
+        </span>
+        <DatePicker selectedDate={date} onSelect={handleDateSelect} />{' '}
+      </div>
+      {/* // <DatePicker selectedDate={date} onSelect={handleDateSelect} /> */}
 
-      <Carousel
+      {/* <Carousel
         opts={{
           align: 'start',
         }}
@@ -187,8 +194,8 @@ const Diet: React.FC = () => {
                               <span className="text-sm font-normal">
                                 {meal.mealCarbs}g
                               </span> */}
-                            {/* </div> */}
-                          </div>
+      {/* </div> */}
+      {/* </div>
                         )}
                     </Card>
                   );
@@ -199,8 +206,8 @@ const Diet: React.FC = () => {
         </CarouselContent>
 
         <CarouselPrevious />
-        <CarouselNext />
-      </Carousel>
+        <CarouselNext /> */}
+      {/* </Carousel> */}
     </>
   );
 };
