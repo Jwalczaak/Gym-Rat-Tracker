@@ -66,13 +66,13 @@ body {
   --macro-rest:    #e5e7eb;   /* gray-200 — donut remainder */
 
   /* Semantic shortcuts — reference shadcn vars so they auto-update in dark */
-  --fg:        var(--foreground);
-  --fg-muted:  var(--muted-foreground);
-  --fg-subtle: var(--gray-400);   /* icons at rest, tertiary labels */
-  --bg:        var(--background);
-  --bg-elev:   var(--card);       /* cards, panels */
-  --bg-subtle: var(--gray-50);    /* main content area */
-  --line:      var(--border);
+  --fg:             var(--foreground);
+  --fg-muted:       var(--muted-foreground);
+  --fg-subtle:      var(--gray-400);   /* icons at rest, tertiary labels */
+  --surface:        var(--background);
+  --surface-raised: var(--card);       /* cards, panels */
+  --surface-subtle: var(--gray-50);    /* main content area */
+  --line:           var(--border);
 
   /* Shadows */
   --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.05);
@@ -120,9 +120,9 @@ body {
   /* Brand shifts to lighter violet in dark mode */
   --brand-violet: var(--violet-400);
 
-  --fg-subtle:     var(--gray-500);
-  --bg-subtle:     oklch(0.18 0 0);
-  --ring-hairline: inset 0 0 0 1px oklch(1 0 0 / 0.10);
+  --fg-subtle:      var(--gray-500);
+  --surface-subtle: oklch(0.18 0 0);
+  --ring-hairline:  inset 0 0 0 1px oklch(1 0 0 / 0.10);
 
   /* Shadcn dark values */
   --background:           oklch(0.145 0 0);
@@ -215,13 +215,13 @@ body {
   --color-macro-rest:    var(--macro-rest);
 
   /* Semantic surface / text */
-  --color-fg:        var(--fg);
-  --color-fg-muted:  var(--fg-muted);
-  --color-fg-subtle: var(--fg-subtle);
-  --color-bg:        var(--bg);
-  --color-bg-elev:   var(--bg-elev);
-  --color-bg-subtle: var(--bg-subtle);
-  --color-line:      var(--line);
+  --color-fg:             var(--fg);
+  --color-fg-muted:       var(--fg-muted);
+  --color-fg-subtle:      var(--fg-subtle);
+  --color-surface:        var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-line:           var(--line);
 
   /* Shadcn tokens — shadcn components read these directly */
   --color-background:                var(--background);

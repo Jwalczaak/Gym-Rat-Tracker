@@ -8,7 +8,7 @@ const AppLayout: React.FC = () => {
     <div className="grid h-screen grid-cols-[26rem_1fr] grid-rows-[auto_1fr]">
       <Header />
       <Sidebar />
-      <main className="overflow-auto bg-gray-50 p-[4rem_4.8rem_6.4rem]">
+      <main className="overflow-auto bg-surface-subtle p-[4rem_4.8rem_6.4rem]">
         <div className="mx-auto flex flex-col gap-[3.2rem]">
           app layout
           <Outlet />

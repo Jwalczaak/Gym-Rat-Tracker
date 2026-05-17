@@ -16,7 +16,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
   const { proteinData, fatData, carbsData } = countChartMacroData(meal);
 
   return (
-    <Card className="h-45 w-full gap-4 bg-gray-100">
+    <Card className="h-45 w-full gap-4 bg-surface-subtle">
       <CardContent className="content flex h-full w-full items-center justify-between font-semibold">
         <div className="flex h-full w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
