@@ -24,15 +24,9 @@ import {
 import { mapIntervalToWeekDays } from '@/utils/helper';
 import { useState } from 'react';
 
-export function DatePicker({
-  onSelect,
-  selectedDate,
-  rangeInDays = 7,
-}: {
-  onSelect: (selectedDate: DateRange | undefined) => void;
-  selectedDate: DateRange | undefined;
-  rangeInDays: number;
-}) {
+export function DatePicker({ rangeInDays = 7 }: { rangeInDays: number }) {
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+
   const currentDate = new Date();
 
   const [centerInterval, setCenterInterval] = useState<Date>(currentDate);
@@ -66,13 +60,21 @@ export function DatePicker({
       >
         <CarouselContent className="h-full items-center">
           {mappedWeekDays.map((day, index) => (
-            <CarouselItem key={index} className="basis-1/2 pl-4 lg:basis-1/7">
-              {/* TODO: when select carousel items and go to next or previous it
-              autoselect (propably css only) new record */}
+            <CarouselItem
+              key={day.date}
+              className="basis-1/2 pl-4 lg:basis-1/7"
+            >
               <label
                 className={`group flex h-full cursor-pointer flex-col items-center justify-center rounded-lg p-2 transition-colors has-checked:border-transparent has-checked:bg-gray-900 ${day.isToday ? 'border-brand border' : ''}`}
               >
-                <input type="radio" name="selected-day" className="sr-only" />
+                <input
+                  type="radio"
+                  name="selected-day"
+                  value={day.date}
+                  checked={selectedDay === day.date}
+                  onChange={() => setSelectedDay(day.date)}
+                  className="sr-only"
+                />
                 <span className="text-fg-muted text-sm group-has-checked:text-white">
                   {day.dayName.substring(0, 3)}
                 </span>
@@ -92,39 +94,5 @@ export function DatePicker({
         <CarouselNext onClick={onNextClick} disabled={false} />
       </Carousel>
     </Card>
-    // <Field className="mx-auto w-60">
-    //   <Popover>
-    //     <PopoverTrigger asChild>
-    //       <Button
-    //         variant="outline"
-    //         id="date-picker-range"
-    //         className="justify-start px-2.5 font-normal"
-    //       >
-    //         <CalendarIcon />
-    //         {selectedDate?.from ? (
-    //           selectedDate.to ? (
-    //             <>
-    //               {format(selectedDate.from, 'LLL dd, y')} -{' '}
-    //               {format(selectedDate.to, 'LLL dd, y')}
-    //             </>
-    //           ) : (
-    //             format(selectedDate.from, 'LLL dd, y')
-    //           )
-    //         ) : (
-    //           <span>Pick a date</span>
-    //         )}
-    //       </Button>
-    //     </PopoverTrigger>
-    //     <PopoverContent className="w-auto p-0" align="start">
-    //       <Calendar
-    //         mode="range"
-    //         defaultMonth={selectedDate?.from}
-    //         selected={selectedDate}
-    //         onSelect={onSelect}
-    //         numberOfMonths={2}
-    //       />
-    //     </PopoverContent>
-    //   </Popover>
-    // </Field>
   );
 }

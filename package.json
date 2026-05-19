@@ -8,7 +8,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "review": "bash scripts/review.sh",
+    "hook:install": "cp scripts/review.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'pre-push hook installed'"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",
