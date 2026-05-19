@@ -3,7 +3,7 @@ import {
   type MacroChartData,
   type MealCount,
 } from '@/types/meal';
-import { eachDayOfInterval, format } from 'date-fns';
+import { eachDayOfInterval, format, isWeekend } from 'date-fns';
 
 export function mapIntervalToWeekDays(
   dateFrom: Date,
@@ -14,7 +14,8 @@ export function mapIntervalToWeekDays(
   dayName: string;
   dayNumber: string;
   monthName: string;
-  isSelected: boolean;
+  isToday: boolean;
+  isWeekend: boolean;
 }[] {
   return eachDayOfInterval({
     start: new Date(dateFrom),
@@ -24,7 +25,8 @@ export function mapIntervalToWeekDays(
     dayName: format(date, 'EEEE'),
     dayNumber: format(date, 'd'),
     monthName: format(date, 'MMMM'),
-    isSelected: date.toDateString() === currentDate.toDateString(),
+    isToday: date.toDateString() === currentDate.toDateString(),
+    isWeekend: isWeekend(date),
   }));
 }
 

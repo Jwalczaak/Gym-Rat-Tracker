@@ -67,9 +67,24 @@ export function DatePicker({
         <CarouselContent className="h-full items-center">
           {mappedWeekDays.map((day, index) => (
             <CarouselItem key={index} className="basis-1/2 pl-4 lg:basis-1/7">
-              <div className="flex h-full flex-col items-center justify-center">
-                <span>{day.dayName}</span>
-              </div>
+              {/* TODO: when select carousel items and go to next or previous it
+              autoselect (propably css only) new record */}
+              <label
+                className={`group flex h-full cursor-pointer flex-col items-center justify-center rounded-lg p-2 transition-colors has-checked:border-transparent has-checked:bg-gray-900 ${day.isToday ? 'border-brand border' : ''}`}
+              >
+                <input type="radio" name="selected-day" className="sr-only" />
+                <span className="text-fg-muted text-sm group-has-checked:text-white">
+                  {day.dayName.substring(0, 3)}
+                </span>
+                <span
+                  className={`text-base font-semibold group-has-checked:text-white ${day.isToday ? 'text-brand' : 'text-fg'}`}
+                >
+                  {day.dayNumber}
+                </span>
+                {!day.isWeekend && (
+                  <span className="bg-brand h-1.5 w-1.5 rounded-full group-has-checked:bg-white"></span>
+                )}
+              </label>
             </CarouselItem>
           ))}
         </CarouselContent>
