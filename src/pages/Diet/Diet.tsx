@@ -97,7 +97,11 @@ const Diet: React.FC = () => {
         <span className="text-muted-foreground text-sm">
           Wednesday, March 12, 2025
         </span>
-        <DatePicker selectedDate={date} onSelect={handleDateSelect} />{' '}
+        <DatePicker
+          selectedDate={date}
+          onSelect={handleDateSelect}
+          rangeInDays={3}
+        />
       </div>
       {/* // <DatePicker selectedDate={date} onSelect={handleDateSelect} /> */}
 

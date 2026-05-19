@@ -5,13 +5,26 @@ import {
 } from '@/types/meal';
 import { eachDayOfInterval, format } from 'date-fns';
 
-export function mapIntervalToWeekDays(dateFrom: Date, dateTo: Date) {
+export function mapIntervalToWeekDays(
+  dateFrom: Date,
+  dateTo: Date,
+  currentDate: Date = new Date(),
+): {
+  date: string;
+  dayName: string;
+  dayNumber: string;
+  monthName: string;
+  isSelected: boolean;
+}[] {
   return eachDayOfInterval({
     start: new Date(dateFrom),
     end: new Date(dateTo),
   }).map((date) => ({
     date: format(date, 'yyyy-MM-dd'),
     dayName: format(date, 'EEEE'),
+    dayNumber: format(date, 'd'),
+    monthName: format(date, 'MMMM'),
+    isSelected: date.toDateString() === currentDate.toDateString(),
   }));
 }
 
