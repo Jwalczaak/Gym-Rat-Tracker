@@ -7,16 +7,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-import { useDiets } from '@/features/diet/useDiets';
+import { useDiets } from '@/features/Diet/useDiets';
 import React, { useMemo, useState } from 'react';
-import type { DateRange } from 'react-day-picker';
+import { Day, type DateRange } from 'react-day-picker';
 import { useSearchParams } from 'react-router-dom';
 import type { GroupedMeals, Meal } from '../../types/meal';
 import { countChartMacroData, mapIntervalToWeekDays } from '@/utils/helper';
 import { defaultMeals } from '@/utils/constants';
-import MealCard from '@/features/diet/MealCard/MealCard';
+import MealCard from '@/features/Diet/MealCard/MealCard';
 import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
 import Chart from '@/components/shared/ Chart/Chart';
+import DayKcalSummary from '@/features/Diet/DayKcalSummary/DayKcalSummary';
 
 const ChartMemoized = React.memo(Chart);
 
@@ -98,6 +99,7 @@ const Diet: React.FC = () => {
           Wednesday, March 12, 2025
         </span>
         <DatePicker rangeInDays={3} />
+        <DayKcalSummary />
       </div>
       {/* // <DatePicker selectedDate={date} onSelect={handleDateSelect} /> */}
 
