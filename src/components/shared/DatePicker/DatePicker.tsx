@@ -24,31 +24,38 @@ import {
 import { mapIntervalToWeekDays } from '@/utils/helper';
 import { useState } from 'react';
 
-export function DatePicker({ rangeInDays = 7 }: { rangeInDays: number }) {
-  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+export function DatePicker({
+  rangeInDays = 7,
+  selectedDay,
+  onSelectDay,
+}: {
+  rangeInDays: number;
+  selectedDay: string;
+  onSelectDay: (day: string) => void;
+}) {
+  const selectedDayAsDate: Date = new Date(selectedDay);
 
-  const currentDate = new Date();
+  const [windowAnchor, setWindowAnchor] = useState<Date>(
+    () => new Date(selectedDay),
+  );
 
-  const [centerInterval, setCenterInterval] = useState<Date>(currentDate);
-
-  const startInterval = subDays(centerInterval, rangeInDays);
-  const endInterval = addDays(centerInterval, rangeInDays);
+  const startInterval = subDays(windowAnchor, rangeInDays);
+  const endInterval = addDays(windowAnchor, rangeInDays);
 
   const mappedWeekDays = mapIntervalToWeekDays(
     startInterval,
     endInterval,
-    currentDate,
+    selectedDayAsDate,
   );
 
-  function onPreviousClick() {
-    setCenterInterval(subDays(centerInterval, rangeInDays));
+  function onPreviousClick(): void {
+    setWindowAnchor((prev) => subDays(prev, rangeInDays));
   }
 
-  function onNextClick() {
-    setCenterInterval(addDays(centerInterval, rangeInDays));
+  function onNextClick(): void {
+    setWindowAnchor((prev) => addDays(prev, rangeInDays));
   }
 
-  console.log('mapped', mappedWeekDays);
   return (
     <Card className="flex h-40 w-full flex-row items-center px-20">
       <Carousel
@@ -72,7 +79,7 @@ export function DatePicker({ rangeInDays = 7 }: { rangeInDays: number }) {
                   name="selected-day"
                   value={day.date}
                   checked={selectedDay === day.date}
-                  onChange={() => setSelectedDay(day.date)}
+                  onChange={() => onSelectDay(day.date)}
                   className="sr-only"
                 />
                 <span className="text-fg-muted text-sm group-has-checked:text-white">

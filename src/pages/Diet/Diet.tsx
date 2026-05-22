@@ -18,78 +18,78 @@ import MealCard from '@/features/Diet/MealCard/MealCard';
 import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
 import Chart from '@/components/shared/ Chart/Chart';
 import DayKcalSummary from '@/features/Diet/DayKcalSummary/DayKcalSummary';
+import { format } from 'date-fns';
 
 const ChartMemoized = React.memo(Chart);
 
 const Diet: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const initialDate: DateRange = {
-    from: new Date(searchParams.get('dateFrom') ?? new Date()),
-    to: new Date(searchParams.get('dateTo') ?? new Date()),
-  };
+  const param = searchParams.get('day');
+  const initialDate: string = param ?? format(new Date(), 'yyyy-MM-dd');
 
-  const [date, setDate] = useState<DateRange | undefined>(initialDate);
+  const [selectedDay, setSelectedDay] = useState<string>(initialDate);
 
-  const { dietPlan = [] } = useDiets(initialDate.from!, initialDate.to!) || [];
+  // const { dietPlan = [] } = useDiets(initialDate.from!, initialDate.to!) || [];
 
-  function handleDateSelect(selected: DateRange | undefined): void {
-    setDate(selected);
+  function handleDateSelect(day: string): void {
+    console.log(day);
 
-    if (!selected?.from || !selected?.to) return;
+    setSelectedDay(day);
 
     setSearchParams({
-      dateFrom: selected.from.toISOString(),
-      dateTo: selected.to.toISOString(),
+      day,
     });
   }
 
-  const groupedPlanByName = useMemo(() => {
-    if (!date?.from || !date?.to) return [];
+  // }
 
-    const days = mapIntervalToWeekDays(date.from, date.to);
+  // const groupedPlanByName = useMemo(() => {
+  //   if (!date?.from || !date?.to) return [];
 
-    return days.map((day) => {
-      const dayMeals = dietPlan.filter((item) => item.log_date === day.date);
+  //   const days = mapIntervalToWeekDays(date.from, date.to);
 
-      const groupedByName = dayMeals.reduce<GroupedMeals>((acc, item) => {
-        const meal: Meal = {
-          name: item.name,
-          weight: item.weight,
-          kcal: item.kcal,
-          protein: item.protein,
-          carbs: item.carbs,
-          fat: item.fat,
-        };
+  //   return days.map((day) => {
+  //     const dayMeals = dietPlan.filter((item) => item.log_date === day.date);
 
-        if (!acc[item.meal_type]) {
-          acc[item.meal_type] = {
-            meal_type: item.meal_type,
-            mealKcal: item.kcal,
-            mealProtein: item.protein,
-            mealCarbs: item.carbs,
-            mealFat: item.fat,
-            meals: [meal],
-          };
-        } else {
-          acc[item.meal_type].mealKcal += item.kcal;
-          acc[item.meal_type].mealProtein += item.protein;
-          acc[item.meal_type].mealCarbs += item.carbs;
-          acc[item.meal_type].mealFat += item.fat;
-          acc[item.meal_type].meals.push(meal);
-        }
+  //     const groupedByName = dayMeals.reduce<GroupedMeals>((acc, item) => {
+  //       const meal: Meal = {
+  //         name: item.name,
+  //         weight: item.weight,
+  //         kcal: item.kcal,
+  //         protein: item.protein,
+  //         carbs: item.carbs,
+  //         fat: item.fat,
+  //       };
 
-        return acc;
-      }, {} as GroupedMeals);
+  //       if (!acc[item.meal_type]) {
+  //         acc[item.meal_type] = {
+  //           meal_type: item.meal_type,
+  //           mealKcal: item.kcal,
+  //           mealProtein: item.protein,
+  //           mealCarbs: item.carbs,
+  //           mealFat: item.fat,
+  //           meals: [meal],
+  //         };
+  //       } else {
+  //         acc[item.meal_type].mealKcal += item.kcal;
+  //         acc[item.meal_type].mealProtein += item.protein;
+  //         acc[item.meal_type].mealCarbs += item.carbs;
+  //         acc[item.meal_type].mealFat += item.fat;
+  //         acc[item.meal_type].meals.push(meal);
+  //       }
 
-      return {
-        date: day.date,
-        weekDay: day.dayName,
-        meals: Object.values(groupedByName),
-      };
-    });
-  }, [dietPlan, date]);
+  //       return acc;
+  //     }, {} as GroupedMeals);
 
-  console.log(groupedPlanByName);
+  //     return {
+  //       date: day.date,
+  //       weekDay: day.dayName,
+  //       meals: Object.values(groupedByName),
+  //     };
+  //   });
+  // }, [dietPlan, date]);
+
+  // console.log(groupedPlanByName);
 
   return (
     <>
@@ -98,7 +98,11 @@ const Diet: React.FC = () => {
         <span className="text-muted-foreground text-sm">
           Wednesday, March 12, 2025
         </span>
-        <DatePicker rangeInDays={3} />
+        <DatePicker
+          rangeInDays={3}
+          selectedDay={selectedDay}
+          onSelectDay={handleDateSelect}
+        />
         <DayKcalSummary />
       </div>
       {/* // <DatePicker selectedDate={date} onSelect={handleDateSelect} /> */}
