@@ -25,7 +25,7 @@ First run these to see what I changed:
 I am an Angular developer learning React. Focus on:
 1. Angular habits sneaking into React code (imperative DOM, misused useEffect, class-like patterns)
 2. React anti-patterns or non-idiomatic code
-3. TypeScript correctness
+3. TypeScript correctness and usage types/interfaces/generic types when they are needed
 4. Any obvious bugs
 
 Be concise. Structure your response as:

@@ -9,7 +9,7 @@ import MealCard from '@/features/Diet/MealCard/MealCard';
 import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
 import Chart from '@/components/shared/ Chart/Chart';
 import DayKcalSummary from '@/features/Diet/DayKcalSummary/DayKcalSummary';
-import { format } from 'date-fns';
+import { format, parse } from 'date-fns';
 
 const ChartMemoized = React.memo(Chart);
 
@@ -72,7 +72,10 @@ const Diet: React.FC = () => {
       <div className="flex flex-col gap-3 px-20">
         <h1>Diet</h1>
         <span className="text-muted-foreground text-sm">
-          {format(new Date(selectedDay), 'EEEE, MMMM d, yyyy')}
+          {format(
+            parse(selectedDay, 'yyyy-MM-dd', new Date()),
+            'EEEE, MMMM d, yyyy',
+          )}
         </span>
         <DatePicker
           rangeInDays={3}
