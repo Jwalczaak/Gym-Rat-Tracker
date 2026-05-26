@@ -20,9 +20,10 @@ const Diet: React.FC = () => {
 
   const [selectedDay, setSelectedDay] = useState<string>(initialDate);
 
-  const { dietPlan = [] } = useDiets(selectedDay) || [];
+  const { dietPlan = [] } = useDiets(selectedDay);
 
   function handleDateSelect(day: string): void {
+    console.log('Selected day:', day);
     setSelectedDay(day);
 
     setSearchParams({
@@ -71,7 +72,7 @@ const Diet: React.FC = () => {
       <div className="flex flex-col gap-3 px-20">
         <h1>Diet</h1>
         <span className="text-muted-foreground text-sm">
-          Wednesday, March 12, 2025
+          {format(new Date(selectedDay), 'EEEE, MMMM d, yyyy')}
         </span>
         <DatePicker
           rangeInDays={3}
