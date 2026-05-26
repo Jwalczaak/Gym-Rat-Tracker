@@ -1,14 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchDietPlan } from '../../services/Diet/apiDiet';
 
-export function useDiets(dateFrom: Date, dateTo: Date) {
+export function useDiets(selectedDay: string) {
   const {
     isLoading,
     data: dietPlan = [],
     error,
   } = useQuery({
-    queryKey: ['dietPlan', dateFrom.toISOString(), dateTo.toISOString()],
-    queryFn: () => fetchDietPlan(dateFrom, dateTo),
+    queryKey: ['dietPlan', selectedDay],
+    queryFn: () => fetchDietPlan(selectedDay),
   });
 
   return {

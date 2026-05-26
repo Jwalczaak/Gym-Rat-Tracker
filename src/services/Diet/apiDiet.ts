@@ -8,11 +8,7 @@ const mealTypeOrder: Record<string, number> = {
   snack: 4,
 };
 
-export async function fetchDietPlan(dateFrom: Date, dateTo: Date) {
-  const dateInterval: DateRange = {
-    from: dateFrom,
-    to: dateTo,
-  };
+export async function fetchDietPlan(selectedDay: string) {
   const { data, error } = await supabase
     .from('meal_logs')
     .select(
@@ -29,8 +25,7 @@ export async function fetchDietPlan(dateFrom: Date, dateTo: Date) {
       )
     `,
     )
-    .gte('log_date', dateInterval.from!.toISOString().split('T')[0])
-    .lte('log_date', dateInterval.to!.toISOString().split('T')[0])
+    .eq('log_date', selectedDay.split('T')[0])
     .order('log_date', { ascending: true })
     .order('meal_type', {
       ascending: true,
