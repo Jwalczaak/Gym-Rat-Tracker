@@ -16,7 +16,7 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
   const { proteinData, fatData, carbsData } = countChartMacroData(meal);
 
   return (
-    <Card className="h-45 w-full gap-4 bg-surface-subtle">
+    <Card className="bg-surface-subtle h-45 w-full gap-4">
       <CardContent className="content flex h-full w-full items-center justify-between font-semibold">
         <div className="flex h-full w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
@@ -26,17 +26,17 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
 
           <div className="flex w-full gap-12">
             <div className="chart-container flex items-center gap-2 font-thin">
-              {/* <Chart type="donut" width={20} height={30} data={proteinData} /> */}
+              <Chart type="donut" width={20} height={30} data={proteinData} />
               <span className="text-sm font-normal">
                 {proteinData[0].value}g
               </span>
             </div>
             <div className="chart-container flex items-center gap-2 font-thin">
-              {/* <Chart type="donut" width={20} height={30} data={fatData} /> */}
+              <Chart type="donut" width={20} height={30} data={fatData} />
               <span className="text-sm font-normal"> {fatData[0].value}g</span>
             </div>{' '}
             <div className="chart-container flex items-center gap-2 font-thin">
-              {/* <Chart type="donut" width={20} height={30} data={carbsData} /> */}
+              <Chart type="donut" width={20} height={30} data={carbsData} />
               <span className="text-sm font-normal">{carbsData[0].value}g</span>
             </div>
           </div>

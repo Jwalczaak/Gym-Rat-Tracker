@@ -1,19 +1,10 @@
 import { DatePicker } from '@/components/shared/DatePicker/DatePicker';
-import { Card, CardContent, CardTitle, CardHeader } from '@/components/ui/card';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
+import { Card, CardContent, CardTitle } from '@/components/ui/card';
 import { useDiets } from '@/features/Diet/useDiets';
 import React, { useMemo, useState } from 'react';
-import { Day, type DateRange } from 'react-day-picker';
 import { useSearchParams } from 'react-router-dom';
 import type { GroupedMeals, Meal } from '../../types/meal';
-import { countChartMacroData, mapIntervalToWeekDays } from '@/utils/helper';
-import { defaultMeals } from '@/utils/constants';
+import { countChartMacroData } from '@/utils/helper';
 import MealCard from '@/features/Diet/MealCard/MealCard';
 import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
 import Chart from '@/components/shared/ Chart/Chart';
@@ -32,8 +23,6 @@ const Diet: React.FC = () => {
   const { dietPlan = [] } = useDiets(selectedDay) || [];
 
   function handleDateSelect(day: string): void {
-    console.log(day);
-
     setSelectedDay(day);
 
     setSearchParams({
@@ -41,14 +30,8 @@ const Diet: React.FC = () => {
     });
   }
 
-  // }
-
   const groupedPlanByName = useMemo(() => {
     if (!selectedDay) return [];
-
-    // const days = mapIntervalToWeekDays(date.from, date.to);
-
-    // return dietPlan;
 
     const groupedByName = dietPlan.reduce<GroupedMeals>((acc, item) => {
       const meal: Meal = {
@@ -80,12 +63,8 @@ const Diet: React.FC = () => {
       return acc;
     }, {} as GroupedMeals);
 
-    console.log('groupedByName', groupedByName);
-
     return Object.values(groupedByName);
   }, [dietPlan, selectedDay]);
-
-  console.log(groupedPlanByName);
 
   return (
     <>
@@ -102,193 +81,84 @@ const Diet: React.FC = () => {
         <DayKcalSummary />
       </div>
 
-      {groupedPlanByName.map((plan) => {
-        // const macroData = countChartMacroData({
-        //   protein: meal.mealProtein,
-        //   fat: meal.mealFat,
-        //   carbs: meal.mealCarbs,
-        //   kcal: meal.mealKcal,
-        // });
+      <div className="grid grid-cols-2 gap-4 px-20">
+        {groupedPlanByName.map((plan) => {
+          const macroData = countChartMacroData({
+            protein: plan.mealProtein,
+            fat: plan.mealFat,
+            carbs: plan.mealCarbs,
+            kcal: plan.mealKcal,
+          });
 
-        return (
-          <Card key={plan.meal_type}>
-            <CardTitle className="flex items-center justify-center p-6">
-              <span className="text-3xl font-semibold">{plan.meal_type}</span>
-            </CardTitle>
+          return (
+            <Card key={plan.meal_type}>
+              <CardTitle className="flex items-center justify-center p-6">
+                <span className="text-3xl font-semibold">{plan.meal_type}</span>
+              </CardTitle>
 
-            <ToggleCard>
-              <CardContent className="flex w-full flex-col gap-6">
-                {plan.meals.length > 0 ? (
-                  plan.meals.map((m1, index) => (
-                    <MealCard
-                      key={index}
-                      meal={m1}
-                      onEdit={(meal) => console.log('Edit:', meal)}
-                      onDelete={(id) => console.log('Delete:', id)}
-                    />
-                  ))
-                ) : (
-                  <span className="text-2xl font-medium">not selected</span>
-                )}
-              </CardContent>
-            </ToggleCard>
+              <ToggleCard>
+                <CardContent className="flex w-full flex-col gap-6">
+                  {plan.meals.length > 0 ? (
+                    plan.meals.map((m1, index) => (
+                      <MealCard
+                        key={index}
+                        meal={m1}
+                        onEdit={(meal) => console.log('Edit:', meal)}
+                        onDelete={(id) => console.log('Delete:', id)}
+                      />
+                    ))
+                  ) : (
+                    <span className="text-2xl font-medium">not selected</span>
+                  )}
+                </CardContent>
+              </ToggleCard>
 
-            {plan.mealProtein &&
-              plan.mealFat &&
-              plan.mealCarbs &&
-              plan.mealKcal && (
-                <div className="flex w-full gap-12 px-6">
-                  <div className="chart-container flex items-center gap-2 font-thin">
-                    {/* <ChartMemoized
-                                type="donut"
-                                width={20}
-                                height={30}
-                                data={macroData.proteinData}
-                              /> */}
-                    <span className="text-sm font-normal">
-                      {plan.mealProtein}g
-                    </span>
-                  </div>
+              {plan.mealProtein &&
+                plan.mealFat &&
+                plan.mealCarbs &&
+                plan.mealKcal && (
+                  <div className="flex w-full gap-12 px-6">
+                    <div className="chart-container flex items-center gap-2 font-thin">
+                      <ChartMemoized
+                        type="donut"
+                        width={20}
+                        height={30}
+                        data={macroData.proteinData}
+                      />
+                      <span className="text-sm font-normal">
+                        {plan.mealProtein}g
+                      </span>
+                    </div>
 
-                  <div className="chart-container flex items-center gap-2 font-thin">
-                    {/* <ChartMemoized
+                    <div className="chart-container flex items-center gap-2 font-thin">
+                      <ChartMemoized
                         type="donut"
                         width={20}
                         height={30}
                         data={macroData.fatData}
-                      /> */}
-                    <span className="text-sm font-normal">{plan.mealFat}g</span>
-                  </div>
-
-                  <div className="chart-container flex items-center gap-2 font-thin">
-                    {/* <ChartMemoized
-                            type="donut"
-                            width={20}
-                            height={30}
-                            data={macroData.carbsData}
-                          /> */}
-                    <span className="text-sm font-normal">
-                      {plan.mealCarbs}g
-                    </span>
-                  </div>
-                </div>
-              )}
-          </Card>
-        );
-      })}
-      {/* // </Card> */}
-
-      {/* second  */}
-      {/* </div> */}
-      {/* </div> */}
-
-      {/* <Carousel
-        opts={{
-          align: 'start',
-        }}
-        className="w-full"
-      >
-        <CarouselContent className="mx-auto flex justify-center gap-4 lg:gap-6">
-          {groupedPlanByName.map((plan, index) => (
-            <CarouselItem key={index} className="basis-1/2 lg:basis-1/5">
-              <div className="flex flex-col gap-4 p-1 lg:gap-6">
-                <Card className="h-40">
-                  <CardHeader className="flex items-center justify-center p-6">
-                    <div className="flex flex-col items-center text-3xl font-semibold">
-                      <span>({plan.date})</span>
-                      <span>{plan.weekDay}</span>
+                      />
+                      <span className="text-sm font-normal">
+                        {plan.mealFat}g
+                      </span>
                     </div>
-                  </CardHeader>
-                </Card>
 
-                {plan.meals.map((meal) => {
-                  const macroData = countChartMacroData({
-                    protein: meal.mealProtein,
-                    fat: meal.mealFat,
-                    carbs: meal.mealCarbs,
-                    kcal: meal.mealKcal,
-                  });
-
-                  return (
-                    <Card key={meal.meal_type}>
-                      <CardTitle className="flex items-center justify-center p-6">
-                        <span className="text-3xl font-semibold">
-                          {meal.meal_type}
-                        </span>
-                      </CardTitle>
-
-                      <ToggleCard>
-                        <CardContent className="flex w-full flex-col gap-6">
-                          {meal.meals.length > 0 ? (
-                            meal.meals.map((m1, index) => (
-                              <MealCard
-                                key={index}
-                                meal={m1}
-                                onEdit={(meal) => console.log('Edit:', meal)}
-                                onDelete={(id) => console.log('Delete:', id)}
-                              />
-                            ))
-                          ) : (
-                            <span className="text-2xl font-medium">
-                              not selected
-                            </span>
-                          )}
-                        </CardContent>
-                      </ToggleCard>
-
-                      {meal.mealProtein &&
-                        meal.mealFat &&
-                        meal.mealCarbs &&
-                        meal.mealKcal && (
-                          <div className="flex w-full gap-12 px-6">
-                            {/* <div className="chart-container flex items-center gap-2 font-thin">
-                              <ChartMemoized
-                                type="donut"
-                                width={20}
-                                height={30}
-                                data={macroData.proteinData}
-                              />
-                              <span className="text-sm font-normal">
-                                {meal.mealProtein}g
-                              </span>
-                            </div>
-
-                            <div className="chart-container flex items-center gap-2 font-thin">
-                              <ChartMemoized
-                                type="donut"
-                                width={20}
-                                height={30}
-                                data={macroData.fatData}
-                              />
-                              <span className="text-sm font-normal">
-                                {meal.mealFat}g
-                              </span>
-                            </div>
-
-                            <div className="chart-container flex items-center gap-2 font-thin">
-                              <ChartMemoized
-                                type="donut"
-                                width={20}
-                                height={30}
-                                data={macroData.carbsData}
-                              />
-                              <span className="text-sm font-normal">
-                                {meal.mealCarbs}g
-                              </span> */}
-      {/* </div> */}
-      {/* </div>
-                        )}
-                    </Card>
-                  );
-                })}
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-
-        <CarouselPrevious />
-        <CarouselNext /> */}
-      {/* </Carousel> */}
+                    <div className="chart-container flex items-center gap-2 font-thin">
+                      <ChartMemoized
+                        type="donut"
+                        width={20}
+                        height={30}
+                        data={macroData.carbsData}
+                      />
+                      <span className="text-sm font-normal">
+                        {plan.mealCarbs}g
+                      </span>
+                    </div>
+                  </div>
+                )}
+            </Card>
+          );
+        })}
+      </div>
     </>
   );
 };

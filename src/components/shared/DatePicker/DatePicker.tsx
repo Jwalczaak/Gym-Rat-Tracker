@@ -1,17 +1,6 @@
 'use client';
 
-import { addDays, format, subDays } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
-import { type DateRange } from 'react-day-picker';
-
-import { Button } from '@/components/ui/button';
-import { Calendar } from '@/components/ui/calendar';
-import { Field, FieldLabel } from '@/components/ui/field';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { addDays, subDays } from 'date-fns';
 
 import { Card } from '@/components/ui/card';
 import {
