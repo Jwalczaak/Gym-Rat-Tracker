@@ -23,9 +23,19 @@ const Diet: React.FC = () => {
 
   const [selectedDay, setSelectedDay] = useState<string>(initialDate);
   // to do fix toogle - currently all meals are toggled together, need to toggle each meal separately
-  const [isToggled, setIsToggled] = React.useState(false);
+  const [openMeals, setOpenMeals] = React.useState<Set<string>>(new Set());
 
-  const toggle = () => setIsToggled((prev) => !prev);
+  const toggle = (mealType: string) => {
+    setOpenMeals((prev) => {
+      const next = new Set(prev);
+      if (next.has(mealType)) {
+        next.delete(mealType);
+      } else {
+        next.add(mealType);
+      }
+      return next;
+    });
+  };
 
   const { dietPlan = [] } = useDiets(selectedDay);
 
@@ -111,7 +121,7 @@ const Diet: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <span className="text-base">{plan.meal_type}</span>
                       <span className="text-muted-foreground text-sm">
-                        {plan.mealKcal}
+                        {plan.mealKcal} kcal
                       </span>
                     </div>
                   </CardTitle>
@@ -124,11 +134,13 @@ const Diet: React.FC = () => {
                       variant="outline"
                       size="icon-lg"
                       className="cursor-pointer rounded-full"
-                      onClick={toggle}
+                      onClick={() => toggle(plan.meal_type)}
                     >
                       <IoIosArrowDown
                         className={`size-6 transition-transform duration-300 ${
-                          isToggled ? 'rotate-180' : 'rotate-0'
+                          openMeals.has(plan.meal_type)
+                            ? 'rotate-180'
+                            : 'rotate-0'
                         }`}
                       />
                     </Button>
@@ -178,7 +190,7 @@ const Diet: React.FC = () => {
                     </div>
                   )}
 
-                <ToggleCard isToggled={isToggled}>
+                <ToggleCard isToggled={openMeals.has(plan.meal_type)}>
                   <CardContent className="flex w-full flex-col gap-6">
                     {plan.meals.length > 0 ? (
                       plan.meals.map((m1, index) => (
