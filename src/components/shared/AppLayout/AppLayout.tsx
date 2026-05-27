@@ -9,7 +9,7 @@ const AppLayout: React.FC = () => {
       <Header />
       <Sidebar />
       <main className="bg-surface-subtle overflow-auto p-[4rem_4.8rem_6.4rem]">
-        <div className="mx-auto flex flex-col gap-[3.2rem]">
+        <div className="mx-auto flex flex-col">
           {/* <h1>Diet</h1> */}
           <Outlet />
         </div>

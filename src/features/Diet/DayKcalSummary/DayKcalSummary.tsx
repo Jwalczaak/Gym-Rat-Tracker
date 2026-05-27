@@ -32,7 +32,7 @@ const DayKcalSummary = () => {
 
   return (
     <Card className="flex flex-row px-6">
-      <div>
+      <div className="w-30">
         <span className="text-fg-muted text-sm">MAR 12</span>
         <div>
           <span className="text-base font-semibold">1230</span>

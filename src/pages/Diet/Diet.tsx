@@ -1,5 +1,5 @@
 import { DatePicker } from '@/components/shared/DatePicker/DatePicker';
-import { Card, CardContent, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDiets } from '@/features/Diet/useDiets';
 import React, { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -10,6 +10,9 @@ import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
 import Chart from '@/components/shared/ Chart/Chart';
 import DayKcalSummary from '@/features/Diet/DayKcalSummary/DayKcalSummary';
 import { format, parse } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { HiPlus } from 'react-icons/hi2';
+import { IoIosArrowDown } from 'react-icons/io';
 
 const ChartMemoized = React.memo(Chart);
 
@@ -19,11 +22,14 @@ const Diet: React.FC = () => {
   const initialDate: string = param ?? format(new Date(), 'yyyy-MM-dd');
 
   const [selectedDay, setSelectedDay] = useState<string>(initialDate);
+  // to do fix toogle - currently all meals are toggled together, need to toggle each meal separately
+  const [isToggled, setIsToggled] = React.useState(false);
+
+  const toggle = () => setIsToggled((prev) => !prev);
 
   const { dietPlan = [] } = useDiets(selectedDay);
 
   function handleDateSelect(day: string): void {
-    console.log('Selected day:', day);
     setSelectedDay(day);
 
     setSearchParams({
@@ -66,102 +72,132 @@ const Diet: React.FC = () => {
 
     return Object.values(groupedByName);
   }, [dietPlan, selectedDay]);
-
   return (
     <>
-      <div className="flex flex-col gap-3 px-20">
-        <h1>Diet</h1>
-        <span className="text-muted-foreground text-sm">
-          {format(
-            parse(selectedDay, 'yyyy-MM-dd', new Date()),
-            'EEEE, MMMM d, yyyy',
-          )}
-        </span>
-        <DatePicker
-          rangeInDays={3}
-          selectedDay={selectedDay}
-          onSelectDay={handleDateSelect}
-        />
-        <DayKcalSummary />
-      </div>
+      <div className="flex flex-col gap-10 px-20">
+        <div className="flex flex-col gap-10">
+          <div>
+            <h1>Diet</h1>
+            <span className="text-muted-foreground text-sm">
+              {format(
+                parse(selectedDay, 'yyyy-MM-dd', new Date()),
+                'EEEE, MMMM d, yyyy',
+              )}
+            </span>
+          </div>
+          <DatePicker
+            rangeInDays={3}
+            selectedDay={selectedDay}
+            onSelectDay={handleDateSelect}
+          />
+          <div>
+            <DayKcalSummary />
+          </div>
+        </div>
 
-      <div className="grid grid-cols-2 gap-4 px-20">
-        {groupedPlanByName.map((plan) => {
-          const macroData = countChartMacroData({
-            protein: plan.mealProtein,
-            fat: plan.mealFat,
-            carbs: plan.mealCarbs,
-            kcal: plan.mealKcal,
-          });
+        <div className="grid grid-cols-2 gap-4">
+          {groupedPlanByName.map((plan) => {
+            const macroData = countChartMacroData({
+              protein: plan.mealProtein,
+              fat: plan.mealFat,
+              carbs: plan.mealCarbs,
+              kcal: plan.mealKcal,
+            });
 
-          return (
-            <Card key={plan.meal_type}>
-              <CardTitle className="flex items-center justify-center p-6">
-                <span className="text-3xl font-semibold">{plan.meal_type}</span>
-              </CardTitle>
-
-              <ToggleCard>
-                <CardContent className="flex w-full flex-col gap-6">
-                  {plan.meals.length > 0 ? (
-                    plan.meals.map((m1, index) => (
-                      <MealCard
-                        key={index}
-                        meal={m1}
-                        onEdit={(meal) => console.log('Edit:', meal)}
-                        onDelete={(id) => console.log('Delete:', id)}
-                      />
-                    ))
-                  ) : (
-                    <span className="text-2xl font-medium">not selected</span>
-                  )}
-                </CardContent>
-              </ToggleCard>
-
-              {plan.mealProtein &&
-                plan.mealFat &&
-                plan.mealCarbs &&
-                plan.mealKcal && (
-                  <div className="flex w-full gap-12 px-6">
-                    <div className="chart-container flex items-center gap-2 font-thin">
-                      <ChartMemoized
-                        type="donut"
-                        width={20}
-                        height={30}
-                        data={macroData.proteinData}
-                      />
-                      <span className="text-sm font-normal">
-                        {plan.mealProtein}g
+            return (
+              <Card key={plan.meal_type}>
+                <CardHeader className="flex justify-between">
+                  <CardTitle>
+                    <div className="flex items-center gap-3">
+                      <span className="text-base">{plan.meal_type}</span>
+                      <span className="text-muted-foreground text-sm">
+                        {plan.mealKcal}
                       </span>
                     </div>
-
-                    <div className="chart-container flex items-center gap-2 font-thin">
-                      <ChartMemoized
-                        type="donut"
-                        width={20}
-                        height={30}
-                        data={macroData.fatData}
+                  </CardTitle>
+                  <div className="flex items-center gap-2">
+                    <Button variant="outline" size="default">
+                      <HiPlus className="size-5" />
+                      <span>Add meal</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon-lg"
+                      className="cursor-pointer rounded-full"
+                      onClick={toggle}
+                    >
+                      <IoIosArrowDown
+                        className={`size-6 transition-transform duration-300 ${
+                          isToggled ? 'rotate-180' : 'rotate-0'
+                        }`}
                       />
-                      <span className="text-sm font-normal">
-                        {plan.mealFat}g
-                      </span>
-                    </div>
-
-                    <div className="chart-container flex items-center gap-2 font-thin">
-                      <ChartMemoized
-                        type="donut"
-                        width={20}
-                        height={30}
-                        data={macroData.carbsData}
-                      />
-                      <span className="text-sm font-normal">
-                        {plan.mealCarbs}g
-                      </span>
-                    </div>
+                    </Button>
                   </div>
-                )}
-            </Card>
-          );
-        })}
+                </CardHeader>
+
+                {plan.mealProtein &&
+                  plan.mealFat &&
+                  plan.mealCarbs &&
+                  plan.mealKcal && (
+                    <div className="flex w-full gap-12">
+                      <div className="chart-container flex items-center gap-2 font-thin">
+                        <ChartMemoized
+                          type="donut"
+                          width={20}
+                          height={30}
+                          data={macroData.proteinData}
+                        />
+                        <span className="text-sm font-normal">
+                          {plan.mealProtein}g
+                        </span>
+                      </div>
+
+                      <div className="chart-container flex items-center gap-2 font-thin">
+                        <ChartMemoized
+                          type="donut"
+                          width={20}
+                          height={30}
+                          data={macroData.fatData}
+                        />
+                        <span className="text-sm font-normal">
+                          {plan.mealFat}g
+                        </span>
+                      </div>
+
+                      <div className="chart-container flex items-center gap-2 font-thin">
+                        <ChartMemoized
+                          type="donut"
+                          width={20}
+                          height={30}
+                          data={macroData.carbsData}
+                        />
+                        <span className="text-sm font-normal">
+                          {plan.mealCarbs}g
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
+                <ToggleCard isToggled={isToggled}>
+                  <CardContent className="flex w-full flex-col gap-6">
+                    {plan.meals.length > 0 ? (
+                      plan.meals.map((m1, index) => (
+                        <MealCard
+                          key={index}
+                          meal={m1}
+                          onEdit={(meal) => console.log('Edit:', meal)}
+                          onDelete={(id) => console.log('Delete:', id)}
+                        />
+                      ))
+                    ) : (
+                      <span className="text-2xl font-medium">not selected</span>
+                    )}
+                  </CardContent>
+                </ToggleCard>
+              </Card>
+            );
+          })}
+        </div>
       </div>
     </>
   );
