@@ -33,6 +33,7 @@ const Diet: React.FC = () => {
       } else {
         next.add(mealType);
       }
+      console.log(next);
       return next;
     });
   };
@@ -82,6 +83,8 @@ const Diet: React.FC = () => {
 
     return Object.values(groupedByName);
   }, [dietPlan, selectedDay]);
+
+  console.log(groupedPlanByName.map((p) => JSON.stringify(p.meal_type)));
   return (
     <>
       <div className="flex flex-col gap-10 px-20">
@@ -105,7 +108,7 @@ const Diet: React.FC = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 items-start gap-4">
           {groupedPlanByName.map((plan) => {
             const macroData = countChartMacroData({
               protein: plan.mealProtein,
@@ -151,47 +154,49 @@ const Diet: React.FC = () => {
                   plan.mealFat &&
                   plan.mealCarbs &&
                   plan.mealKcal && (
-                    <div className="flex w-full gap-12">
-                      <div className="chart-container flex items-center gap-2 font-thin">
-                        <ChartMemoized
-                          type="donut"
-                          width={20}
-                          height={30}
-                          data={macroData.proteinData}
-                        />
-                        <span className="text-sm font-normal">
-                          {plan.mealProtein}g
-                        </span>
-                      </div>
+                    <CardContent>
+                      <div className="bg-surface-subtle flex w-full gap-12">
+                        <div className="chart-container flex items-center gap-2 font-thin">
+                          <ChartMemoized
+                            type="donut"
+                            width={20}
+                            height={30}
+                            data={macroData.proteinData}
+                          />
+                          <span className="text-sm font-normal">
+                            {plan.mealProtein}g
+                          </span>
+                        </div>
 
-                      <div className="chart-container flex items-center gap-2 font-thin">
-                        <ChartMemoized
-                          type="donut"
-                          width={20}
-                          height={30}
-                          data={macroData.fatData}
-                        />
-                        <span className="text-sm font-normal">
-                          {plan.mealFat}g
-                        </span>
-                      </div>
+                        <div className="chart-container flex items-center gap-2 font-thin">
+                          <ChartMemoized
+                            type="donut"
+                            width={20}
+                            height={30}
+                            data={macroData.fatData}
+                          />
+                          <span className="text-sm font-normal">
+                            {plan.mealFat}g
+                          </span>
+                        </div>
 
-                      <div className="chart-container flex items-center gap-2 font-thin">
-                        <ChartMemoized
-                          type="donut"
-                          width={20}
-                          height={30}
-                          data={macroData.carbsData}
-                        />
-                        <span className="text-sm font-normal">
-                          {plan.mealCarbs}g
-                        </span>
+                        <div className="chart-container flex items-center gap-2 font-thin">
+                          <ChartMemoized
+                            type="donut"
+                            width={20}
+                            height={30}
+                            data={macroData.carbsData}
+                          />
+                          <span className="text-sm font-normal">
+                            {plan.mealCarbs}g
+                          </span>
+                        </div>
                       </div>
-                    </div>
+                    </CardContent>
                   )}
 
                 <ToggleCard isToggled={openMeals.has(plan.meal_type)}>
-                  <CardContent className="flex w-full flex-col gap-6">
+                  <CardContent className="flex w-full flex-col gap-6 px-0">
                     {plan.meals.length > 0 ? (
                       plan.meals.map((m1, index) => (
                         <MealCard

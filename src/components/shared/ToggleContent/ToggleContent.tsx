@@ -16,7 +16,7 @@ const ToggleContent = ({
           opacity: isToggled ? 1 : 0,
         }}
       >
-        <div className="min-h-0 overflow-hidden">{children}</div>
+        <div className="min-h-0">{children}</div>
       </div>
     </div>
   );

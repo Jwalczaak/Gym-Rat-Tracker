@@ -16,12 +16,15 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
   const { proteinData, fatData, carbsData } = countChartMacroData(meal);
 
   return (
-    <Card className="bg-surface-subtle h-45 w-full gap-4">
+    <Card className="bg-surface-subtle h-45 w-full">
       <CardContent className="content flex h-full w-full items-center justify-between font-semibold">
         <div className="flex h-full w-full flex-col justify-between">
           <div className="flex flex-col gap-1">
-            <span className="text-2xl">{meal.name}</span>
-            <span className="text-sm font-normal">{meal.weight}g</span>
+            <span className="text-base">{meal.name}</span>
+            <div className="text-muted-foreground flex gap-x-4 text-sm">
+              <span>{meal.weight}g</span>
+              <span>{meal.kcal}kcal</span>
+            </div>
           </div>
 
           <div className="flex w-full gap-12">
