@@ -1,4 +1,3 @@
-import type { DateRange } from 'react-day-picker';
 import { supabase } from '../supabase';
 
 const mealTypeOrder: Record<string, number> = {

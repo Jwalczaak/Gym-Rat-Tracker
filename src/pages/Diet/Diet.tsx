@@ -11,8 +11,8 @@ import Chart from '@/components/shared/ Chart/Chart';
 import DayKcalSummary from '@/features/Diet/DayKcalSummary/DayKcalSummary';
 import { format, parse } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { HiPlus } from 'react-icons/hi2';
 import { IoIosArrowDown } from 'react-icons/io';
+import AddMeal from '@/features/Diet/AddMeal/AddMeal';
 
 const ChartMemoized = React.memo(Chart);
 
@@ -129,10 +129,11 @@ const Diet: React.FC = () => {
                     </div>
                   </CardTitle>
                   <div className="flex items-center gap-2">
-                    <Button variant="outline" size="default">
+                    {/* <Button variant="outline" size="default">
                       <HiPlus className="size-5" />
                       <span>Add meal</span>
-                    </Button>
+                    </Button> */}
+                    <AddMeal />
                     <Button
                       variant="outline"
                       size="icon-lg"
