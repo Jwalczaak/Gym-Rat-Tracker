@@ -1,3 +1,4 @@
+import { Card } from '@/components/ui/card';
 import { useOutsideClick } from '@/hooks/useOutsideClick';
 import React, {
   cloneElement,
@@ -48,26 +49,54 @@ function Open({
   });
 }
 
-function Window({ children, name }: { children: React.ReactNode; name: string }) {
+function Window({
+  children,
+  name,
+}: {
+  children: React.ReactNode;
+  name: string;
+}) {
   const { openName, close } = useModalContext();
   const ref = useOutsideClick<HTMLDivElement>(close);
 
   if (name !== openName) return null;
 
   return createPortal(
-    <div className="fixed top-0 left-0 z-1000 h-screen w-full backdrop-blur-sm">
-      <div
+    <div className="fixed top-0 left-0 z-1000 h-screen w-full backdrop-blur-xs">
+      <Card
         ref={ref}
-        className="bg-surface-subtle p-6 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 shadow-(--shadow-sm) transition-all duration-500"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 shadow-(--shadow-sm) transition-all duration-500"
       >
-        <span className="text-fg-muted text-base">{children}</span>
-      </div>
+        <div> {children}</div>
+      </Card>
     </div>,
     document.body,
   );
 }
 
+function Header({
+  title,
+  secondTitle,
+  subTitle,
+}: {
+  title: string;
+  secondTitle?: string;
+  subTitle?: string;
+}) {
+  return (
+    <div>
+      {title},{subTitle},{secondTitle}
+    </div>
+  );
+}
+
+function Footer({ footerText }: { footerText: string }) {
+  return <div>{footerText}</div>;
+}
+
 Modal.Open = Open;
 Modal.Window = Window;
+Modal.Header = Header;
+Modal.Footer = Footer;
 
 export default Modal;

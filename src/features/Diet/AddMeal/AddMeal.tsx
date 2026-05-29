@@ -1,6 +1,7 @@
 import Modal from '@/components/shared/Modal/Modal';
 import { Button } from '@/components/ui/button';
 import { HiPlus } from 'react-icons/hi2';
+import CreateMealForm from '../CreateMealForm/CreateMealForm';
 
 const AddMeal = () => {
   return (
@@ -11,7 +12,11 @@ const AddMeal = () => {
           <span>Add meal</span>
         </Button>
       </Modal.Open>
-      <Modal.Window name="meal-form">dsadas</Modal.Window>
+      <Modal.Window name="meal-form">
+        <Modal.Header title="dsad" secondTitle="dsad" subTitle="dsads" />
+        <CreateMealForm />
+        <Modal.Footer footerText="text" />
+      </Modal.Window>
     </Modal>
   );
 };

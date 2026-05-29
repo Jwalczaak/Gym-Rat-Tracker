@@ -33,7 +33,6 @@ const Diet: React.FC = () => {
       } else {
         next.add(mealType);
       }
-      console.log(next);
       return next;
     });
   };
