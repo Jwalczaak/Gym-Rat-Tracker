@@ -34,7 +34,7 @@ export async function fetchDietPlan(selectedDay: string) {
 
   if (error) {
     console.error('Error fetching diet plan:', error);
-    throw new Error('Cabins could not be loaded');
+    throw new Error('Diet plan could not be loaded');
   }
 
   const flat =
@@ -73,4 +73,29 @@ export async function fetchDietPlan(selectedDay: string) {
 
   console.log(flat);
   return flat || [];
+}
+
+export async function fetchMeals(searchPhrase: string, meal_type: string) {
+  const { data, error } = await supabase
+    .from('meals')
+    .select(
+      `
+      id,
+      name,
+      meal_type,
+      kcal_per_100g,
+      protein_per_100g,
+      carbs_per_100g,
+      fat_per_100g
+    `,
+    )
+    .eq('meal_type', meal_type)
+    .ilike('name', `%${searchPhrase}%`)
+    .limit(20);
+  if (error) {
+    console.error('Error fetching meals', error);
+    throw new Error(`Meals can't be loaded`);
+  }
+
+  return data;
 }

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import Modal from '@/components/shared/Modal/Modal';
 import { Button } from '@/components/ui/button';
 import { HiPlus } from 'react-icons/hi2';
@@ -7,13 +6,12 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoSearch } from 'react-icons/io5';
 import { FiPlus } from 'react-icons/fi';
 import { Badge } from '@/components/ui/badge';
+import SearchMeal from '../SearchMeal/SearchMeal';
 
 const triggerClass =
-  'cursor-pointer text-fg-muted hover:text-foreground data-active:text-brand data-active:hover:text-brand data-active:after:bg-brand';
+  'group cursor-pointer text-fg-muted hover:text-foreground data-active:text-brand data-active:hover:text-brand data-active:after:bg-brand';
 
 const AddMeal = () => {
-  const [activeTab, setActiveTab] = useState('search');
-
   return (
     <Modal>
       <Modal.Open opens="meal-form">
@@ -34,13 +32,14 @@ const AddMeal = () => {
             </span>
 
             <div>
-              <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
+              <Tabs defaultValue="search">
                 <TabsList variant="line">
                   <TabsTrigger value="search" className={triggerClass}>
                     <IoSearch className="size-6" />
                     <span>Search database</span>
                     <Badge
-                      variant={activeTab === 'search' ? 'brand' : 'secondary'}
+                      variant="secondary"
+                      className="group-data-active:bg-brand group-data-active:text-white"
                     >
                       16
                     </Badge>
@@ -54,8 +53,18 @@ const AddMeal = () => {
             </div>
           </div>
         </Modal.Header>
-        <CreateMealForm />
-        <Modal.Footer>123222 </Modal.Footer>
+        {/* <CreateMealForm /> */}
+        <div>
+          <SearchMeal />
+        </div>
+        <Modal.Footer>
+          <div className="flex items-center justify-between">
+            <span className="text-fg-muted">
+              Find an existing product in your database, or create a new one
+            </span>
+            <Button variant="ghost">Cancel</Button>
+          </div>
+        </Modal.Footer>
       </Modal.Window>
     </Modal>
   );
