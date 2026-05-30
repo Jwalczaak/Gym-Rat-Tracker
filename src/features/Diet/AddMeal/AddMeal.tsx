@@ -1,21 +1,61 @@
+import { useState } from 'react';
 import Modal from '@/components/shared/Modal/Modal';
 import { Button } from '@/components/ui/button';
 import { HiPlus } from 'react-icons/hi2';
 import CreateMealForm from '../CreateMealForm/CreateMealForm';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { IoSearch } from 'react-icons/io5';
+import { FiPlus } from 'react-icons/fi';
+import { Badge } from '@/components/ui/badge';
+
+const triggerClass =
+  'cursor-pointer text-fg-muted hover:text-foreground data-active:text-brand data-active:hover:text-brand data-active:after:bg-brand';
 
 const AddMeal = () => {
+  const [activeTab, setActiveTab] = useState('search');
+
   return (
     <Modal>
       <Modal.Open opens="meal-form">
-        <Button variant="outline" size="default">
+        <Button variant="outline" size="default" className="cursor-pointer">
           <HiPlus className="size-5" />
           <span>Add meal</span>
         </Button>
       </Modal.Open>
       <Modal.Window name="meal-form">
-        <Modal.Header title="dsad" secondTitle="dsad" subTitle="dsads" />
+        <Modal.Header>
+          <div className="flex flex-col gap-2">
+            <div className="flex gap-2 text-lg font-semibold">
+              <span>Add Meal</span>
+              <span className="text-brand">Breakfast</span>
+            </div>
+            <span className="text-fg-muted">
+              Find an existing product in your database, or create a new one
+            </span>
+
+            <div>
+              <Tabs defaultValue={activeTab} onValueChange={setActiveTab}>
+                <TabsList variant="line">
+                  <TabsTrigger value="search" className={triggerClass}>
+                    <IoSearch className="size-6" />
+                    <span>Search database</span>
+                    <Badge
+                      variant={activeTab === 'search' ? 'brand' : 'secondary'}
+                    >
+                      16
+                    </Badge>
+                  </TabsTrigger>
+                  <TabsTrigger value="create" className={triggerClass}>
+                    <FiPlus className="size-6" />
+                    Create new product
+                  </TabsTrigger>
+                </TabsList>
+              </Tabs>
+            </div>
+          </div>
+        </Modal.Header>
         <CreateMealForm />
-        <Modal.Footer footerText="text" />
+        <Modal.Footer>123222 </Modal.Footer>
       </Modal.Window>
     </Modal>
   );

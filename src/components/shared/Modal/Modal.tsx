@@ -74,24 +74,12 @@ function Window({
   );
 }
 
-function Header({
-  title,
-  secondTitle,
-  subTitle,
-}: {
-  title: string;
-  secondTitle?: string;
-  subTitle?: string;
-}) {
-  return (
-    <div>
-      {title},{subTitle},{secondTitle}
-    </div>
-  );
+function Header({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>;
 }
 
-function Footer({ footerText }: { footerText: string }) {
-  return <div>{footerText}</div>;
+function Footer({ children }: { children: React.ReactNode }) {
+  return <div>{children}</div>;
 }
 
 Modal.Open = Open;

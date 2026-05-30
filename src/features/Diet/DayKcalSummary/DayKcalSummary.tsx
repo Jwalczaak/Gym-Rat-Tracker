@@ -1,4 +1,3 @@
-import Chart from '@/components/shared/ Chart/Chart';
 import { Card } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
 

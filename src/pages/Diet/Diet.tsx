@@ -128,10 +128,6 @@ const Diet: React.FC = () => {
                     </div>
                   </CardTitle>
                   <div className="flex items-center gap-2">
-                    {/* <Button variant="outline" size="default">
-                      <HiPlus className="size-5" />
-                      <span>Add meal</span>
-                    </Button> */}
                     <AddMeal />
                     <Button
                       variant="outline"
