@@ -3,9 +3,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDiets } from '@/features/Diet/useDiets';
 import React, { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { FullMeal, GroupedMeals } from '../../types/meal';
+import type { FullMeal } from '../../types/meal';
 import { countChartMacroData } from '@/utils/helper';
-import MealCard from '@/features/Diet/MealCard/MealCard';
+import MealEditCard from '@/features/Diet/MealEditCard/MealEditCard';
 import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
 import Chart from '@/components/shared/ Chart/Chart';
 import DayKcalSummary from '@/features/Diet/DayKcalSummary/DayKcalSummary';
@@ -13,6 +13,7 @@ import { format, parse } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { IoIosArrowDown } from 'react-icons/io';
 import AddMeal from '@/features/Diet/AddMeal/AddMeal';
+import type { GroupedMeals } from '@/types/dietPlan';
 
 const ChartMemoized = React.memo(Chart);
 
@@ -194,7 +195,7 @@ const Diet: React.FC = () => {
                   <CardContent className="flex w-full flex-col gap-6 px-0">
                     {plan.meals.length > 0 ? (
                       plan.meals.map((m1, index) => (
-                        <MealCard
+                        <MealEditCard
                           key={index}
                           meal={m1}
                           onEdit={(meal) => console.log('Edit:', meal)}

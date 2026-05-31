@@ -4,7 +4,7 @@ import type { LoggedMeal } from '@/types/meal';
 
 type UseMealsResult = {
   isLoading: boolean;
-  error: unknown;
+  error: Error | null;
   dietPlan: LoggedMeal[];
 };
 

@@ -2,17 +2,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { CiEdit } from 'react-icons/ci';
-import type { Meal } from '@/types/meal';
+import type { FullMeal, LoggedMeal } from '@/types/meal';
 import React from 'react';
 import Chart from '@/components/shared/ Chart/Chart';
 import { countChartMacroData } from '@/utils/helper';
-type MealCardProps = {
-  meal: Meal;
-  onEdit: (meal: Meal) => void;
-  onDelete: (meal: Meal) => void;
+type MealEditCardProps = {
+  meal: FullMeal;
+  onEdit: (meal: LoggedMeal) => void;
+  onDelete: (meal: LoggedMeal) => void;
 };
 
-const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
+const MealEditCard: React.FC<MealEditCardProps> = ({
+  meal,
+  onEdit,
+  onDelete,
+}) => {
   const { proteinData, fatData, carbsData } = countChartMacroData(meal);
 
   return (
@@ -65,4 +69,4 @@ const MealCard: React.FC<MealCardProps> = ({ meal, onEdit, onDelete }) => {
   );
 };
 
-export default MealCard;
+export default MealEditCard;

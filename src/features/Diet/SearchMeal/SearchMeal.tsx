@@ -11,6 +11,9 @@ const SearchMeal = () => {
   return (
     <div>
       <Input value={phrase} onChange={(e) => setPhrase(e.target.value)} />{' '}
+      {meals.map((meal) => (
+        <div key={meal.id}>{meal.name}</div>
+      ))}
     </div>
   );
 };
