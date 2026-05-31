@@ -1,7 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchDietPlan } from '../../services/Diet/apiDiet';
+import type { LoggedMeal } from '@/types/meal';
 
-export function useDiets(selectedDay: string) {
+type UseMealsResult = {
+  isLoading: boolean;
+  error: unknown;
+  dietPlan: LoggedMeal[];
+};
+
+export function useDiets(selectedDay: string): UseMealsResult {
   const {
     isLoading,
     data: dietPlan = [],

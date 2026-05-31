@@ -1,8 +1,4 @@
-import {
-  MACRO_COLORS,
-  type MacroChartData,
-  type MealCount,
-} from '@/types/meal';
+import { MACRO_COLORS, type MacroChartData, type Macro } from '@/types/meal';
 import { eachDayOfInterval, format, isWeekend } from 'date-fns';
 
 export function mapIntervalToWeekDays(
@@ -30,7 +26,7 @@ export function mapIntervalToWeekDays(
   }));
 }
 
-export function countChartMacroData(meal: MealCount): MacroChartData {
+export function countChartMacroData(meal: Macro): MacroChartData {
   const summedMacros: number = meal.protein + meal.fat + meal.carbs;
 
   return {

@@ -1,3 +1,33 @@
+export type MealPer100g = {
+  name: string;
+  meal_type: string;
+  id: string;
+  kcal_per_100g: number;
+  fat_per_100g: number;
+  carbs_per_100g: number;
+  protein_per_100g: number;
+};
+
+export type FullMeal = {
+  name: string;
+  weight: number;
+  kcal: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
+export type LoggedMeal = {
+  log_date: string;
+  meal_type: string;
+  name: string;
+  weight: number;
+  kcal: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
 export type MacroChartData = {
   proteinData: MacroData[];
   fatData: MacroData[];
@@ -17,29 +47,9 @@ export const MACRO_COLORS = {
   rest: '#e5e7eb',
 } as const;
 
-export type DietPlanRow = {
-  meal_type: string;
-  mealKcal: number;
-  mealProtein: number;
-  mealCarbs: number;
-  mealFat: number;
-  meals: Meal[];
-};
-
-export type Meal = {
-  name: string;
-  weight: number;
-  kcal: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-};
-
-export type MealCount = {
+export type Macro = {
   protein: number;
   fat: number;
   carbs: number;
   kcal: number;
 };
-
-export type GroupedMeals = Record<string, DietPlanRow>;

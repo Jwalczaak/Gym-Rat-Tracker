@@ -1,3 +1,4 @@
+import type { LoggedMeal } from '@/types/meal';
 import { supabase } from '../supabase';
 
 const mealTypeOrder: Record<string, number> = {
@@ -7,7 +8,9 @@ const mealTypeOrder: Record<string, number> = {
   snack: 4,
 };
 
-export async function fetchDietPlan(selectedDay: string) {
+export async function fetchDietPlan(
+  selectedDay: string,
+): Promise<LoggedMeal[]> {
   const { data, error } = await supabase
     .from('meal_logs')
     .select(

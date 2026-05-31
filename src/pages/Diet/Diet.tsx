@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDiets } from '@/features/Diet/useDiets';
 import React, { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { GroupedMeals, Meal } from '../../types/meal';
+import type { FullMeal, GroupedMeals } from '../../types/meal';
 import { countChartMacroData } from '@/utils/helper';
 import MealCard from '@/features/Diet/MealCard/MealCard';
 import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
@@ -22,7 +22,6 @@ const Diet: React.FC = () => {
   const initialDate: string = param ?? format(new Date(), 'yyyy-MM-dd');
 
   const [selectedDay, setSelectedDay] = useState<string>(initialDate);
-  // to do fix toogle - currently all meals are toggled together, need to toggle each meal separately
   const [openMeals, setOpenMeals] = React.useState<Set<string>>(new Set());
 
   const toggle = (mealType: string) => {
@@ -51,7 +50,7 @@ const Diet: React.FC = () => {
     if (!selectedDay) return [];
 
     const groupedByName = dietPlan.reduce<GroupedMeals>((acc, item) => {
-      const meal: Meal = {
+      const meal: FullMeal = {
         name: item.name,
         weight: item.weight,
         kcal: item.kcal,
