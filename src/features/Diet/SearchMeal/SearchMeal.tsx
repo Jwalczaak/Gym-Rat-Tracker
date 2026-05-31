@@ -1,10 +1,13 @@
 import { Input } from '@/components/ui/input';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useMeals } from '../useMeals';
+import { useDebounce } from '@/hooks/useDebounce';
 
 const SearchMeal = () => {
-  const [phrase, setPhrase] = useState<string>('');
-  const meals = useMeals(phrase, 'breakfast');
+  const [phrase, setPhrase] = useState('');
+  const debouncedPhrase = useDebounce(phrase, 300);
+  const { meals } = useMeals(debouncedPhrase, 'breakfast');
+
   return (
     <div>
       <Input value={phrase} onChange={(e) => setPhrase(e.target.value)} />{' '}
