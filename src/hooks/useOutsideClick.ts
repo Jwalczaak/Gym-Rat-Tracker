@@ -11,7 +11,8 @@ export function useOutsideClick<T extends HTMLElement = HTMLElement>(
   useEffect(
     function () {
       function handleClick(e: MouseEvent) {
-        if (ref.current && !ref.current.contains(e.target as Node)) {
+        const target = e.target as Node;
+        if (ref.current && !ref.current.contains(target) && target.isConnected) {
           handlerRef.current();
         }
       }
