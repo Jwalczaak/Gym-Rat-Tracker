@@ -6,11 +6,26 @@ import { IoSearch } from 'react-icons/io5';
 import { FiPlus } from 'react-icons/fi';
 import { Badge } from '@/components/ui/badge';
 import SearchMeal from '../SearchMeal/SearchMeal';
+import { useState } from 'react';
+
+type Tab = 'search' | 'create' | 'select';
 
 const triggerClass =
   'group cursor-pointer text-fg-muted hover:text-foreground data-active:text-brand data-active:hover:text-brand data-active:after:bg-brand';
 
 const AddMeal = () => {
+  const [activeTab, setActiveTab] = useState<Tab>('search');
+
+  function handleActiveTab(tab: Tab) {
+    setActiveTab(tab);
+  }
+
+  const tabContent: Record<Tab, React.ReactNode> = {
+    search: <SearchMeal onSelectMeal={() => handleActiveTab('select')} />,
+    create: <div>create</div>,
+    select: <div>select</div>,
+  };
+
   return (
     <Modal>
       <Modal.Open opens="meal-form">
@@ -31,7 +46,10 @@ const AddMeal = () => {
             </span>
 
             <div>
-              <Tabs defaultValue="search">
+              <Tabs
+                value={activeTab === 'select' ? 'search' : activeTab}
+                onValueChange={(v) => handleActiveTab(v as Tab)}
+              >
                 <TabsList variant="line">
                   <TabsTrigger value="search" className={triggerClass}>
                     <IoSearch className="size-6" />
@@ -52,10 +70,7 @@ const AddMeal = () => {
             </div>
           </div>
         </Modal.Header>
-        {/* <CreateMealForm /> */}
-        <div>
-          <SearchMeal />
-        </div>
+        {tabContent[activeTab]}
         <Modal.Footer>
           <div className="flex items-center justify-between">
             <span className="text-fg-muted">

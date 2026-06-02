@@ -5,17 +5,32 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { GrFormNext } from 'react-icons/gr';
+import { IoSearch } from 'react-icons/io5';
+import type { MealPer100g } from '@/types/meal';
 
-const SearchMeal = () => {
+type SearchMealProps = {
+  onSelectMeal: (meal: MealPer100g) => void;
+};
+
+const SearchMeal: React.FC<SearchMealProps> = ({ onSelectMeal }) => {
   const [phrase, setPhrase] = useState('');
   const debouncedPhrase = useDebounce(phrase, 300);
   const { meals } = useMeals(debouncedPhrase, 'breakfast');
 
   return (
-    <div>
-      <Input value={phrase} onChange={(e) => setPhrase(e.target.value)} />{' '}
+    <div className="flex flex-col">
+      <div className="relative my-3">
+        <IoSearch className="text-fg-muted absolute top-1/2 left-3 size-5 -translate-y-1/2" />
+        <Input
+          className="h-12 pl-10"
+          value={phrase}
+          placeholder="Search products (e.g chicken,oats,banana)"
+          onChange={(e) => setPhrase(e.target.value)}
+        />
+      </div>
       {meals.map((meal) => (
         <Card
+          onClick={() => onSelectMeal(meal)}
           key={meal.id}
           className="hover:ring-border hover:bg-muted cursor-pointer ring-0 transition-colors hover:ring-1"
         >
