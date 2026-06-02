@@ -1,7 +1,6 @@
 import Modal from '@/components/shared/Modal/Modal';
 import { Button } from '@/components/ui/button';
 import { HiPlus } from 'react-icons/hi2';
-import CreateMealForm from '../CreateMealForm/CreateMealForm';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { IoSearch } from 'react-icons/io5';
 import { FiPlus } from 'react-icons/fi';
@@ -39,7 +38,7 @@ const AddMeal = () => {
                     <span>Search database</span>
                     <Badge
                       variant="secondary"
-                      className="group-data-active:bg-brand group-data-active:text-white"
+                      className="group-data-active:bg-brand/15 group-data-active:text-brand"
                     >
                       16
                     </Badge>
