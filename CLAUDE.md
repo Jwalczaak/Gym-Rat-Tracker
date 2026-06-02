@@ -44,7 +44,6 @@ A Claude Code review runs automatically before every `git push` via `.git/hooks/
 
 The review checks for:
 
-- Angular habits in React code
 - React anti-patterns
 - TypeScript issues
 - Obvious bugs

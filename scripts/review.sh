@@ -22,8 +22,8 @@ First run these to see what I changed:
   git diff @{u}..HEAD   (if pushing — changes vs remote)
   git diff HEAD~1       (fallback — last commit)
 
-I am an Angular developer learning React. Focus on:
-1. Angular habits sneaking into React code (imperative DOM, misused useEffect, class-like patterns)
+I am the developer learning React. Focus on:
+1. Anti-habits sneaking into React code (imperative DOM, misused useEffect, class-like patterns)
 2. React anti-patterns or non-idiomatic code
 3. TypeScript correctness and usage types/interfaces/generic types when they are needed
 4. Any obvious bugs
