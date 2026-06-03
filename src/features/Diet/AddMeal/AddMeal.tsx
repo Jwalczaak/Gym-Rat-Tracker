@@ -7,6 +7,8 @@ import { FiPlus } from 'react-icons/fi';
 import { Badge } from '@/components/ui/badge';
 import SearchMeal from '../SearchMeal/SearchMeal';
 import { useState } from 'react';
+import CreateMealForm from '../CreateMealForm/CreateMealForm';
+import type { MealPer100g } from '@/types/meal';
 
 type Tab = 'search' | 'create' | 'select';
 
@@ -15,15 +17,17 @@ const triggerClass =
 
 const AddMeal = () => {
   const [activeTab, setActiveTab] = useState<Tab>('search');
+  const [selectedMeal, setSelectedMeal] = useState<MealPer100g | null>(null);
 
-  function handleActiveTab(tab: Tab) {
-    setActiveTab(tab);
+  function handleSelectMeal(meal: MealPer100g) {
+    setSelectedMeal(meal);
+    setActiveTab('select');
   }
 
-  const tabContent: Record<Tab, React.ReactNode> = {
-    search: <SearchMeal onSelectMeal={() => handleActiveTab('select')} />,
-    create: <div>create</div>,
-    select: <div>select</div>,
+  const tabContent: Record<Tab, () => React.ReactNode> = {
+    search: () => <SearchMeal onSelectMeal={handleSelectMeal} />,
+    create: () => <CreateMealForm />,
+    select: () => <div>select</div>,
   };
 
   return (
@@ -48,7 +52,7 @@ const AddMeal = () => {
             <div>
               <Tabs
                 value={activeTab === 'select' ? 'search' : activeTab}
-                onValueChange={(v) => handleActiveTab(v as Tab)}
+                onValueChange={(v) => setActiveTab(v as Tab)}
               >
                 <TabsList variant="line">
                   <TabsTrigger value="search" className={triggerClass}>
@@ -70,7 +74,7 @@ const AddMeal = () => {
             </div>
           </div>
         </Modal.Header>
-        {tabContent[activeTab]}
+        {tabContent[activeTab]()}
         <Modal.Footer>
           <div className="flex items-center justify-between">
             <span className="text-fg-muted">

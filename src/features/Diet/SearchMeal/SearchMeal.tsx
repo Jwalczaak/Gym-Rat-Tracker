@@ -22,7 +22,7 @@ const SearchMeal: React.FC<SearchMealProps> = ({ onSelectMeal }) => {
       <div className="relative my-3">
         <IoSearch className="text-fg-muted absolute top-1/2 left-3 size-5 -translate-y-1/2" />
         <Input
-          className="h-12 pl-10"
+          className="pl-10"
           value={phrase}
           placeholder="Search products (e.g chicken,oats,banana)"
           onChange={(e) => setPhrase(e.target.value)}
