@@ -65,7 +65,7 @@ function Window({
     <div className="fixed top-0 left-0 z-1000 h-screen w-full backdrop-blur-xs">
       <Card
         ref={ref}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 p-6 shadow-(--shadow-sm) transition-all duration-500"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-0 shadow-(--shadow-sm) transition-all duration-500"
       >
         <div> {children}</div>
       </Card>
@@ -75,11 +75,20 @@ function Window({
 }
 
 function Header({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return (
+    <div className="ring-border border-b">
+      {' '}
+      <div className="p-4">{children}</div>
+    </div>
+  );
 }
 
 function Footer({ children }: { children: React.ReactNode }) {
-  return <div>{children}</div>;
+  return (
+    <div className="ring-border border-t">
+      <div className="p-4">{children}</div>
+    </div>
+  );
 }
 
 Modal.Open = Open;
