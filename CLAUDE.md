@@ -27,6 +27,7 @@ When I share code I wrote, treat it as a review. Tell me:
 - Is the React thinking correct?
 - Is there a simpler/more idiomatic way?
 - What would a React developer notice?
+- Should I divide something for smaller components?
 
 ### Short explanations first
 
