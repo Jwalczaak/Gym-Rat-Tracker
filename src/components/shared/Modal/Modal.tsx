@@ -1,5 +1,4 @@
 import { Card } from '@/components/ui/card';
-import { useOutsideClick } from '@/hooks/useOutsideClick';
 import React, {
   cloneElement,
   createContext,
@@ -57,17 +56,19 @@ function Window({
   name: string;
 }) {
   const { openName, close } = useModalContext();
-  const ref = useOutsideClick<HTMLDivElement>(close);
 
   if (name !== openName) return null;
 
   return createPortal(
-    <div className="fixed top-0 left-0 z-1000 h-screen w-full backdrop-blur-xs">
+    <div
+      className="fixed top-0 left-0 z-1000 h-screen w-full backdrop-blur-xs"
+      onMouseDown={close}
+    >
       <Card
-        ref={ref}
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 py-0 shadow-(--shadow-sm) transition-all duration-500"
+        onMouseDown={(e) => e.stopPropagation()}
       >
-        <div> {children}</div>
+        <div>{children}</div>
       </Card>
     </div>,
     document.body,
