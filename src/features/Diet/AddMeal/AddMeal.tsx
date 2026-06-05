@@ -24,6 +24,35 @@ const AddMeal = () => {
     setActiveTab('select');
   }
 
+  const footerContent: Record<Tab, () => React.ReactNode> = {
+    search: () => (
+      <>
+        <span className="text-fg-muted">Pick a product to set grams or servings</span>
+        <Button variant="ghost">Cancel</Button>
+      </>
+    ),
+    create: () => (
+      <>
+        <span className="text-fg-muted">
+          Saves to your database & logs the amount above to this meal
+        </span>
+        <div className="flex gap-2">
+          <Button variant="ghost">Cancel</Button>
+          <Button variant="brand">Save</Button>
+        </div>
+      </>
+    ),
+    select: () => (
+      <>
+        <span className="text-fg-muted">Logging xg to this meal</span>
+        <div className="flex gap-2">
+          <Button variant="ghost">Back</Button>
+          <Button variant="brand">Save</Button>
+        </div>
+      </>
+    ),
+  };
+
   const tabContent: Record<Tab, () => React.ReactNode> = {
     search: () => <SearchMeal onSelectMeal={handleSelectMeal} />,
     create: () => <CreateMealForm />,
@@ -77,34 +106,7 @@ const AddMeal = () => {
         <div className="p-4"> {tabContent[activeTab]()}</div>
         <Modal.Footer>
           <div className="flex items-center justify-between">
-            {activeTab === 'search' && (
-              <>
-                <span className="text-fg-muted">
-                  Pick a product to set grams or servings
-                </span>
-                <Button variant="ghost">Cancel</Button>
-              </>
-            )}
-            {activeTab === 'create' && (
-              <>
-                <span className="text-fg-muted">
-                  Saves to your database & logs the amount above to this meal
-                </span>
-                <div className="flex gap-2">
-                  <Button variant="ghost">Cancel</Button>
-                  <Button variant="brand">Save</Button>
-                </div>
-              </>
-            )}
-            {activeTab === 'select' && (
-              <>
-                <span className="text-fg-muted">Logging xg to this meal</span>
-                <div className="flex gap-2">
-                  <Button variant="ghost">Back</Button>
-                  <Button variant="brand">Save</Button>
-                </div>
-              </>
-            )}
+            {footerContent[activeTab]()}
           </div>
         </Modal.Footer>
       </Modal.Window>
