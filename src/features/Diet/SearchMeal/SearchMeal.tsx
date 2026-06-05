@@ -32,7 +32,7 @@ const SearchMeal: React.FC<SearchMealProps> = ({ onSelectMeal }) => {
         <Card
           onClick={() => onSelectMeal(meal)}
           key={meal.id}
-          className="hover:ring-border hover:bg-muted cursor-pointer ring-0 transition-colors hover:ring-1"
+          className="hover:bg-muted cursor-pointer ring-0 transition-colors hover:ring-1"
         >
           <CardContent>
             <div className="flex items-center justify-between">

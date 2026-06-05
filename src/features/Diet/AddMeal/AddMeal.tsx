@@ -9,6 +9,7 @@ import SearchMeal from '../SearchMeal/SearchMeal';
 import { useState } from 'react';
 import CreateMealForm from '../CreateMealForm/CreateMealForm';
 import type { MealPer100g } from '@/types/meal';
+import SelectMeal from '../SelectMeal/SelectMeal';
 
 type Tab = 'search' | 'create' | 'select';
 
@@ -27,7 +28,9 @@ const AddMeal = () => {
   const footerContent: Record<Tab, () => React.ReactNode> = {
     search: () => (
       <>
-        <span className="text-fg-muted">Pick a product to set grams or servings</span>
+        <span className="text-fg-muted">
+          Pick a product to set grams or servings
+        </span>
         <Button variant="ghost">Cancel</Button>
       </>
     ),
@@ -56,7 +59,7 @@ const AddMeal = () => {
   const tabContent: Record<Tab, () => React.ReactNode> = {
     search: () => <SearchMeal onSelectMeal={handleSelectMeal} />,
     create: () => <CreateMealForm />,
-    select: () => <div>select</div>,
+    select: () => <SelectMeal />,
   };
 
   return (

@@ -77,8 +77,7 @@ function Window({
 
 function Header({ children }: { children: React.ReactNode }) {
   return (
-    <div className="ring-border border-b">
-      {' '}
+    <div className="border-b">
       <div className="p-4">{children}</div>
     </div>
   );
@@ -86,7 +85,7 @@ function Header({ children }: { children: React.ReactNode }) {
 
 function Footer({ children }: { children: React.ReactNode }) {
   return (
-    <div className="ring-border border-t">
+    <div className="border-t">
       <div className="p-4">{children}</div>
     </div>
   );
