@@ -31,7 +31,9 @@ const AddMeal = () => {
         <span className="text-fg-muted">
           Pick a product to set grams or servings
         </span>
-        <Button variant="ghost">Cancel</Button>
+        <Button variant="ghost" type="button">
+          Cancel
+        </Button>
       </>
     ),
     create: () => (
@@ -40,8 +42,12 @@ const AddMeal = () => {
           Saves to your database & logs the amount above to this meal
         </span>
         <div className="flex gap-2">
-          <Button variant="ghost">Cancel</Button>
-          <Button variant="brand">Save</Button>
+          <Button variant="ghost" type="button">
+            Cancel
+          </Button>
+          <Button variant="brand" type="submit" form="select-meal">
+            Save
+          </Button>
         </div>
       </>
     ),
@@ -49,8 +55,12 @@ const AddMeal = () => {
       <>
         <span className="text-fg-muted">Logging xg to this meal</span>
         <div className="flex gap-2">
-          <Button variant="ghost">Back</Button>
-          <Button variant="brand">Save</Button>
+          <Button variant="ghost" type="button">
+            Back
+          </Button>
+          <Button variant="brand" type="submit" form="select-meal">
+            Save
+          </Button>
         </div>
       </>
     ),
@@ -59,7 +69,7 @@ const AddMeal = () => {
   const tabContent: Record<Tab, () => React.ReactNode> = {
     search: () => <SearchMeal onSelectMeal={handleSelectMeal} />,
     create: () => <CreateMealForm />,
-    select: () => <SelectMeal />,
+    select: () => selectedMeal && <SelectMeal meal={selectedMeal} />,
   };
 
   return (
