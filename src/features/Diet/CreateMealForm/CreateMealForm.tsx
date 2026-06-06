@@ -6,13 +6,14 @@ import {
   FieldLegend,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import CountedMacro from '../CountedMacro/CountedMacro';
 
 const CreateMealForm = () => {
   return (
     <>
       <form>
         <FieldGroup>
-          <FieldSet>
+          <FieldSet className="flex flex-col gap-5">
             <Field>
               <FieldLabel htmlFor="product">Product name</FieldLabel>
               <Input id="product" placeholder="e.g. Homemade granol" required />
@@ -53,24 +54,8 @@ const CreateMealForm = () => {
           </FieldSet>
         </FieldGroup>
       </form>
-
-      <div className="bg-muted border-input my-6 flex h-14 items-center justify-between rounded-md border px-4 py-2">
-        <div className="flex gap-2">
-          <span className="text-muted-foreground">Kcal</span>
-          <span className="text-small font-medium">0g</span>
-        </div>
-        <div className="flex gap-2">
-          <span className="text-macro-protein">Protein</span>
-          <span className="text-small font-medium">0g</span>
-        </div>
-        <div className="flex gap-2">
-          <span className="text-macro-fat">Fat</span>
-          <span className="text-small font-medium">0g</span>
-        </div>
-        <div className="flex gap-2">
-          <span className="text-macro-carbs">Carbs</span>
-          <span className="text-small font-medium">0g</span>
-        </div>
+      <div className="mt-5">
+        <CountedMacro />
       </div>
     </>
   );
