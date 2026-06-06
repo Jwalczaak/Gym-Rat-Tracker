@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import { Field } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { IoIosArrowBack } from 'react-icons/io';
 import CountedMacro from '../CountedMacro/CountedMacro';
@@ -23,15 +22,31 @@ const SelectMeal = () => {
         </div>
       </div>
       <form className="flex w-full flex-col justify-between gap-5">
-        <Field>
-          <Input id="kcal" type="number" required />
-        </Field>
+        <div>
+          <Input
+            id="quantity"
+            type="number"
+            aria-label="Quantity in grams"
+            required
+          />
+        </div>
 
         <div className="grid grid-cols-4 gap-4">
-          <Button variant="outline">50g</Button>
-          <Button variant="outline"> 100g </Button>
-          <Button variant="outline"> 150g </Button>
-          <Button variant="outline"> 200g </Button>
+          <Button type="button" variant="outline">
+            50g
+          </Button>
+          <Button type="button" variant="outline">
+            {' '}
+            100g{' '}
+          </Button>
+          <Button type="button" variant="outline">
+            {' '}
+            150g{' '}
+          </Button>
+          <Button type="button" variant="outline">
+            {' '}
+            200g{' '}
+          </Button>
         </div>
       </form>
       <CountedMacro />

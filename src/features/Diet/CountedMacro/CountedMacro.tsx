@@ -1,5 +1,3 @@
-import React from 'react';
-
 const CountedMacro = () => {
   return (
     <div className="bg-muted border-input flex h-14 w-full items-center justify-between rounded-md border px-4 py-2">
