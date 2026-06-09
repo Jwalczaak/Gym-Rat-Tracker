@@ -8,9 +8,13 @@ import {
 import { Input } from '@/components/ui/input';
 
 const CreateMealForm = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <>
-      <form id="createMeal">
+      <form id="createMeal" onSubmit={handleSubmit}>
         <FieldGroup>
           <FieldSet className="flex flex-col gap-5">
             <Field>

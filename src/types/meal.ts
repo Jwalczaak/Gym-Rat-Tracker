@@ -8,6 +8,13 @@ export type MealPer100g = {
   protein_per_100g: number;
 };
 
+export type AddLogMeal = {
+  meal_id: string;
+  log_date: string;
+  eaten: boolean;
+  weight: number;
+};
+
 export type FullMeal = {
   name: string;
   weight: number;
@@ -17,16 +24,16 @@ export type FullMeal = {
   fat: number;
 };
 
-export type LoggedMeal = {
-  log_date: string;
-  meal_type: string;
-  name: string;
-  weight: number;
-  kcal: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-};
+// export type LoggedMeal = {
+//   log_date: string;
+//   meal_type: string;
+//   name: string;
+//   weight: number;
+//   kcal: number;
+//   protein: number;
+//   carbs: number;
+//   fat: number;
+// };
 
 export type MacroChartData = {
   proteinData: MacroData[];

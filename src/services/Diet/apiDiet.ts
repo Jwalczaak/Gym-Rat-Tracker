@@ -1,5 +1,6 @@
-import type { LoggedMeal } from '@/types/meal';
+import type { AddLogMeal } from '@/types/meal';
 import { supabase } from '../supabase';
+import type { DietPlan } from '@/types/dietPlan';
 
 const mealTypeOrder: Record<string, number> = {
   breakfast: 1,
@@ -8,9 +9,7 @@ const mealTypeOrder: Record<string, number> = {
   snack: 4,
 };
 
-export async function fetchDietPlan(
-  selectedDay: string,
-): Promise<LoggedMeal[]> {
+export async function fetchDietPlan(selectedDay: string): Promise<DietPlan[]> {
   const { data, error } = await supabase
     .from('meal_logs')
     .select(
@@ -98,6 +97,21 @@ export async function fetchMeals(searchPhrase: string, meal_type: string) {
   if (error) {
     console.error('Error fetching meals', error);
     throw new Error(`Meals can't be loaded`);
+  }
+
+  return data;
+}
+
+export async function addNewItemToMeal(newItem: AddLogMeal) {
+  console.log(newItem);
+
+  const query = supabase.from('meal_logs').insert({ ...newItem });
+
+  const { data, error } = await query.select().single();
+
+  if (error) {
+    console.error('Meal could not be loaded');
+    throw new Error('Meal could not be loaded');
   }
 
   return data;

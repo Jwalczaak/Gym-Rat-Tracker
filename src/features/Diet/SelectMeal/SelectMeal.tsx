@@ -2,8 +2,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { IoIosArrowBack } from 'react-icons/io';
 import CountedMacro from '../CountedMacro/CountedMacro';
-import type { Macro, MealPer100g } from '@/types/meal';
+import type { AddLogMeal, Macro, MealPer100g } from '@/types/meal';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { format } from 'date-fns';
+import { addNewItemToMeal } from '@/services/Diet/apiDiet';
+import { useAddSelectedMeal } from '../useAddSelectedMeal';
 
 type SelectMealProps = {
   meal: MealPer100g;
@@ -12,6 +16,9 @@ type SelectMealProps = {
 const QUICK_GRAMS = [50, 100, 150, 200];
 
 const SelectMeal = ({ meal }: SelectMealProps) => {
+  const [searchParams] = useSearchParams();
+  const dayParam = searchParams.get('day') ?? format(new Date(), 'yyyy-MM-dd');
+
   const [grams, setGrams] = useState<number>(0);
 
   const mealMacro: Macro = {
@@ -19,6 +26,19 @@ const SelectMeal = ({ meal }: SelectMealProps) => {
     protein: meal.protein_per_100g * (grams / 100),
     fat: meal.fat_per_100g * (grams / 100),
     carbs: meal.carbs_per_100g * (grams / 100),
+  };
+
+  const { isCreating, addSelectedMeal } = useAddSelectedMeal();
+
+  const handleSubmit = (e) => {
+    const logMeal: AddLogMeal = {
+      meal_id: meal.id,
+      log_date: dayParam,
+      eaten: false,
+      weight: grams,
+    };
+    addSelectedMeal({ ...logMeal });
+    e.preventDefault();
   };
 
   return (
@@ -41,10 +61,7 @@ const SelectMeal = ({ meal }: SelectMealProps) => {
       <form
         className="flex w-full flex-col justify-between gap-5"
         id="select-meal"
-        onSubmit={(e) => {
-          e.preventDefault();
-          console.log('submit grams:', grams);
-        }}
+        onSubmit={handleSubmit}
       >
         <div>
           <Input

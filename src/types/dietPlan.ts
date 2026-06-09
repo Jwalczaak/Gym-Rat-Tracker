@@ -9,4 +9,15 @@ export type DietPlanRow = {
   meals: FullMeal[];
 };
 
+export type DietPlan = {
+  log_date: string;
+  meal_type: string;
+  name: string;
+  weight: number;
+  kcal: number;
+  protein: number;
+  carbs: number;
+  fat: number;
+};
+
 export type GroupedMeals = Record<string, DietPlanRow>;
