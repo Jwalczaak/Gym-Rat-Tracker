@@ -1,4 +1,4 @@
-import { fetchMeals } from '@/services/Diet/apiDiet';
+import { fetchMeals } from '@/services/Diet/ApiMeal';
 import { useQuery } from '@tanstack/react-query';
 
 export function useMeals(searchPhrase: string, meal_type: string) {

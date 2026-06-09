@@ -31,6 +31,7 @@ const SelectMeal = ({ meal }: SelectMealProps) => {
   const { isCreating, addSelectedMeal } = useAddSelectedMeal();
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     const logMeal: AddLogMeal = {
       meal_id: meal.id,
       log_date: dayParam,
@@ -38,7 +39,6 @@ const SelectMeal = ({ meal }: SelectMealProps) => {
       weight: grams,
     };
     addSelectedMeal({ ...logMeal });
-    e.preventDefault();
   };
 
   return (

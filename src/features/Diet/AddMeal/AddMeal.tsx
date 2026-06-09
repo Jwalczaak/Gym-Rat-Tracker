@@ -45,7 +45,7 @@ const AddMeal = () => {
           <Button variant="ghost" type="button">
             Cancel
           </Button>
-          <Button variant="brand" type="submit" form="select-meal">
+          <Button variant="brand" type="submit" form="create-meal">
             Save
           </Button>
         </div>

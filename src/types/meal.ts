@@ -24,17 +24,6 @@ export type FullMeal = {
   fat: number;
 };
 
-// export type LoggedMeal = {
-//   log_date: string;
-//   meal_type: string;
-//   name: string;
-//   weight: number;
-//   kcal: number;
-//   protein: number;
-//   carbs: number;
-//   fat: number;
-// };
-
 export type MacroChartData = {
   proteinData: MacroData[];
   fatData: MacroData[];
