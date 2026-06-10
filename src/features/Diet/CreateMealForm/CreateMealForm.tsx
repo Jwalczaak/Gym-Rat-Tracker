@@ -6,23 +6,53 @@ import {
   FieldLegend,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import type { MealPer100g } from '@/types/meal';
-import { useForm, type FieldErrors } from 'react-hook-form';
+import type { Macro, MealPer100g } from '@/types/meal';
+import {
+  useForm,
+  useWatch,
+  type Control,
+  type FieldErrors,
+} from 'react-hook-form';
 import { useCreateMeal } from '../useCreateMeal';
+import CountedMacro from '../CountedMacro/CountedMacro';
+
+type FormValues = Omit<MealPer100g, 'id' | 'meal_type'> & { grams: number };
+
+function LiveMacro({ control }: { control: Control<FormValues> }) {
+  const [kcal, protein, fat, carbs, grams] = useWatch({
+    control,
+    name: [
+      'kcal_per_100g',
+      'protein_per_100g',
+      'fat_per_100g',
+      'carbs_per_100g',
+      'grams',
+    ],
+  });
+
+  const g = (grams || 0) / 100;
+  const countedMacro: Macro = {
+    kcal: (kcal || 0) * g,
+    protein: (protein || 0) * g,
+    fat: (fat || 0) * g,
+    carbs: (carbs || 0) * g,
+  };
+
+  return <CountedMacro macro={countedMacro} />;
+}
 
 const CreateMealForm = () => {
-  const { register, getValues, handleSubmit, reset, formState } =
-    useForm<Omit<MealPer100g, 'id' | 'meal_type'>>();
+  const { register, handleSubmit, control, formState } = useForm<FormValues>({
+    defaultValues: { grams: 0 },
+  });
 
   const { isCreating, createMeal } = useCreateMeal();
 
-  const onSubmit = (data: Omit<MealPer100g, 'id' | 'meal_type'>) => {
+  const onSubmit = (data: FormValues) => {
     createMeal({ ...data, meal_type: 'breakfast' });
   };
 
-  const onError = (
-    errors: FieldErrors<Omit<MealPer100g, 'id' | 'meal_type'>>,
-  ) => {
+  const onError = (errors: FieldErrors<FormValues>) => {
     console.log(errors);
   };
 
@@ -98,12 +128,20 @@ const CreateMealForm = () => {
             </FieldSet>
             <Field>
               <FieldLabel htmlFor="logMeal">Log to this meal</FieldLabel>
-              <Input id="logMeal" type="number" />
+              <Input
+                id="logMeal"
+                type="number"
+                {...register('grams', {
+                  valueAsNumber: true,
+                })}
+              />
             </Field>
           </FieldSet>
         </FieldGroup>
       </form>
-      <div className="mt-5">{/* <CountedMacro /> */}</div>
+      <div className="mt-5">
+        <LiveMacro control={control} />
+      </div>
     </>
   );
 };
