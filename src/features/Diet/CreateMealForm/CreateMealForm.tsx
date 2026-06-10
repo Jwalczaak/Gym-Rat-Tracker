@@ -6,14 +6,17 @@ import {
   FieldLegend,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import type { Macro, MealPer100g } from '@/types/meal';
+import type { AddLogMeal, Macro, MealPer100g } from '@/types/meal';
 import {
   useForm,
   useWatch,
   type Control,
   type FieldErrors,
 } from 'react-hook-form';
+import { useSearchParams } from 'react-router-dom';
+import { format } from 'date-fns';
 import { useCreateMeal } from '../useCreateMeal';
+import { useAddSelectedMeal } from '../useAddSelectedMeal';
 import CountedMacro from '../CountedMacro/CountedMacro';
 
 type FormValues = Omit<MealPer100g, 'id' | 'meal_type'> & { grams: number };
@@ -47,9 +50,30 @@ const CreateMealForm = () => {
   });
 
   const { isCreating, createMeal } = useCreateMeal();
+  const { addSelectedMeal } = useAddSelectedMeal();
+
+  const [searchParams] = useSearchParams();
+  const dayParam = searchParams.get('day') ?? format(new Date(), 'yyyy-MM-dd');
 
   const onSubmit = (data: FormValues) => {
-    createMeal({ ...data, meal_type: 'breakfast' });
+    const { grams, ...mealFields } = data;
+
+    createMeal(
+      { ...mealFields, meal_type: 'breakfast' },
+      {
+        onSuccess: (createdMeal) => {
+          if (!grams) return;
+
+          const logMeal: AddLogMeal = {
+            meal_id: createdMeal.id,
+            log_date: dayParam,
+            eaten: false,
+            weight: grams,
+          };
+          addSelectedMeal(logMeal);
+        },
+      },
+    );
   };
 
   const onError = (errors: FieldErrors<FormValues>) => {
