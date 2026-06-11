@@ -25,51 +25,19 @@ const AddMeal = () => {
     setActiveTab('select');
   }
 
-  const footerContent: Record<Tab, () => React.ReactNode> = {
-    search: () => (
-      <>
-        <span className="text-fg-muted">
-          Pick a product to set grams or servings
-        </span>
-        <Button variant="ghost" type="button">
-          Cancel
-        </Button>
-      </>
-    ),
-    create: () => (
-      <>
-        <span className="text-fg-muted">
-          Saves to your database & logs the amount above to this meal
-        </span>
-        <div className="flex gap-2">
-          <Button variant="ghost" type="button">
-            Cancel
-          </Button>
-          <Button variant="brand" type="submit" form="create-meal">
-            Save
-          </Button>
-        </div>
-      </>
-    ),
-    select: () => (
-      <>
-        <span className="text-fg-muted">Logging xg to this meal</span>
-        <div className="flex gap-2">
-          <Button variant="ghost" type="button">
-            Back
-          </Button>
-          <Button variant="brand" type="submit" form="select-meal">
-            Save
-          </Button>
-        </div>
-      </>
-    ),
-  };
-
   const tabContent: Record<Tab, () => React.ReactNode> = {
     search: () => <SearchMeal onSelectMeal={handleSelectMeal} />,
     create: () => <CreateMealForm />,
-    select: () => selectedMeal && <SelectMeal meal={selectedMeal} />,
+    select: () =>
+      selectedMeal && (
+        <SelectMeal
+          meal={selectedMeal}
+          onBack={() => {
+            setSelectedMeal(null);
+            setActiveTab('search');
+          }}
+        />
+      ),
   };
 
   return (
@@ -116,12 +84,7 @@ const AddMeal = () => {
             </div>
           </div>
         </Modal.Header>
-        <div className="p-4"> {tabContent[activeTab]()}</div>
-        <Modal.Footer>
-          <div className="flex items-center justify-between">
-            {footerContent[activeTab]()}
-          </div>
-        </Modal.Footer>
+        {tabContent[activeTab]()}
       </Modal.Window>
     </Modal>
   );

@@ -6,6 +6,8 @@ import {
   FieldLegend,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import Modal, { useModalContext } from '@/components/shared/Modal/Modal';
 import type { AddLogMeal, Macro, MealPer100g } from '@/types/meal';
 import {
   useForm,
@@ -51,6 +53,7 @@ const CreateMealForm = () => {
 
   const { isCreating, createMeal } = useCreateMeal();
   const { addSelectedMeal } = useAddSelectedMeal();
+  const { close } = useModalContext();
 
   const [searchParams] = useSearchParams();
   const dayParam = searchParams.get('day') ?? format(new Date(), 'yyyy-MM-dd');
@@ -62,7 +65,10 @@ const CreateMealForm = () => {
       { ...mealFields, meal_type: 'breakfast' },
       {
         onSuccess: (createdMeal) => {
-          if (!grams) return;
+          if (!grams) {
+            close();
+            return;
+          }
 
           const logMeal: AddLogMeal = {
             meal_id: createdMeal.id,
@@ -70,7 +76,7 @@ const CreateMealForm = () => {
             eaten: false,
             weight: grams,
           };
-          addSelectedMeal(logMeal);
+          addSelectedMeal(logMeal, { onSuccess: close });
         },
       },
     );
@@ -82,8 +88,9 @@ const CreateMealForm = () => {
 
   return (
     <>
-      <form id="create-meal" onSubmit={handleSubmit(onSubmit, onError)}>
-        <FieldGroup>
+      <div className="p-4">
+        <form id="create-meal" onSubmit={handleSubmit(onSubmit, onError)}>
+          <FieldGroup>
           <FieldSet className="flex flex-col gap-5">
             <Field>
               <FieldLabel htmlFor="product">Product name</FieldLabel>
@@ -162,10 +169,33 @@ const CreateMealForm = () => {
             </Field>
           </FieldSet>
         </FieldGroup>
-      </form>
-      <div className="mt-5">
-        <LiveMacro control={control} />
+        </form>
+        <div className="mt-5">
+          <LiveMacro control={control} />
+        </div>
       </div>
+      <Modal.Footer>
+        <div className="flex items-center justify-between">
+          <span className="text-fg-muted">
+            Saves to your database & logs the amount above to this meal
+          </span>
+          <div className="flex gap-2">
+            <Modal.Close>
+              <Button variant="ghost" type="button">
+                Cancel
+              </Button>
+            </Modal.Close>
+            <Button
+              variant="brand"
+              type="submit"
+              form="create-meal"
+              disabled={isCreating}
+            >
+              Save
+            </Button>
+          </div>
+        </div>
+      </Modal.Footer>
     </>
   );
 };

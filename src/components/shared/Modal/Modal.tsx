@@ -15,7 +15,7 @@ type ModalContextType = {
 
 const ModalContext = createContext<ModalContextType | null>(null);
 
-function useModalContext() {
+export function useModalContext() {
   const context = useContext(ModalContext);
   if (!context) throw new Error('Modal components must be used within <Modal>');
   return context;
@@ -45,6 +45,18 @@ function Open({
 
   return cloneElement(children, {
     onClick: () => open(opensWindowName),
+  });
+}
+
+function Close({
+  children,
+}: {
+  children: React.ReactElement<{ onClick?: React.MouseEventHandler }>;
+}) {
+  const { close } = useModalContext();
+
+  return cloneElement(children, {
+    onClick: close,
   });
 }
 
@@ -95,5 +107,6 @@ Modal.Open = Open;
 Modal.Window = Window;
 Modal.Header = Header;
 Modal.Footer = Footer;
+Modal.Close = Close;
 
 export default Modal;
