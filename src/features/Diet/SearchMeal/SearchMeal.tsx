@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { GrFormNext } from 'react-icons/gr';
 import { IoSearch } from 'react-icons/io5';
 import type { MealPer100g } from '@/types/meal';
+import { Spinner } from '@/components/ui/spinner';
 
 type SearchMealProps = {
   onSelectMeal: (meal: MealPer100g) => void;
@@ -17,7 +18,7 @@ type SearchMealProps = {
 const SearchMeal: React.FC<SearchMealProps> = ({ onSelectMeal }) => {
   const [phrase, setPhrase] = useState('');
   const debouncedPhrase = useDebounce(phrase, 300);
-  const { meals } = useMeals(debouncedPhrase, 'breakfast');
+  const { isLoading, meals } = useMeals(debouncedPhrase, 'breakfast');
 
   return (
     <>
@@ -31,30 +32,37 @@ const SearchMeal: React.FC<SearchMealProps> = ({ onSelectMeal }) => {
             onChange={(e) => setPhrase(e.target.value)}
           />
         </div>
-        {meals.map((meal) => (
-          <Card
-            onClick={() => onSelectMeal(meal)}
-            key={meal.id}
-            className="hover:bg-muted cursor-pointer ring-0 transition-colors hover:ring-1"
-          >
-            <CardContent>
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col">
-                  <span className="text-base font-semibold">{meal.name}</span>
-                  <span className="text-fg-muted text-xs">
-                    {meal.kcal_per_100g} / 100g
-                  </span>
+
+        {isLoading ? (
+          <div className="flex items-center justify-center p-4">
+            <Spinner className="size-12" />
+          </div>
+        ) : (
+          meals.map((meal) => (
+            <Card
+              onClick={() => onSelectMeal(meal)}
+              key={meal.id}
+              className="hover:bg-muted cursor-pointer ring-0 transition-colors hover:ring-1"
+            >
+              <CardContent>
+                <div className="flex items-center justify-between">
+                  <div className="flex flex-col">
+                    <span className="text-base font-semibold">{meal.name}</span>
+                    <span className="text-fg-muted text-xs">
+                      {meal.kcal_per_100g} / 100g
+                    </span>
+                  </div>
+                  <div className="flex gap-2">
+                    <Badge variant="blue">{meal.protein_per_100g}P</Badge>
+                    <Badge variant="yellow">{meal.fat_per_100g}F</Badge>
+                    <Badge variant="green">{meal.carbs_per_100g}C</Badge>
+                    <GrFormNext className="size-6" />
+                  </div>
                 </div>
-                <div className="flex gap-2">
-                  <Badge variant="blue">{meal.protein_per_100g}P</Badge>
-                  <Badge variant="yellow">{meal.fat_per_100g}F</Badge>
-                  <Badge variant="green">{meal.carbs_per_100g}C</Badge>
-                  <GrFormNext className="size-6" />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
       <Modal.Footer>
         <div className="flex items-center justify-between">

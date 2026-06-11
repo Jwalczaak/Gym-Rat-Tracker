@@ -8,6 +8,7 @@ import { useSearchParams } from 'react-router-dom';
 import { format } from 'date-fns';
 import { addNewItemToMeal } from '@/services/Diet/apiDiet';
 import { useAddSelectedMeal } from '../useAddSelectedMeal';
+import { Spinner } from '@/components/ui/spinner';
 
 type SelectMealProps = {
   meal: MealPer100g;
@@ -44,7 +45,12 @@ const SelectMeal = ({ meal, onBack }: SelectMealProps) => {
   };
 
   return (
-    <>
+    <div className="relative">
+      {isCreating && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center">
+          <Spinner className="size-12" />
+        </div>
+      )}
       <div className="flex flex-col items-start justify-between gap-5 p-4">
         <div className="bg-muted border-input flex w-full flex-col justify-between rounded-md border px-4 py-2">
           <span className="text-lg font-semibold">{meal.name}</span>
@@ -100,7 +106,7 @@ const SelectMeal = ({ meal, onBack }: SelectMealProps) => {
           </div>
         </div>
       </Modal.Footer>
-    </>
+    </div>
   );
 };
 
