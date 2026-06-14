@@ -2,26 +2,26 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Modal, { useModalContext } from '@/components/shared/Modal/Modal';
 import CountedMacro from '../CountedMacro/CountedMacro';
-import type { AddLogMeal, Macro, MealPer100g } from '@/types/meal';
+import type { Macro, MealPer100g } from '@/types/meal';
 import { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { format } from 'date-fns';
-import { addNewItemToMeal } from '@/services/Diet/apiDiet';
-import { useAddSelectedMeal } from '../useAddSelectedMeal';
 import { Spinner } from '@/components/ui/spinner';
 
 type SelectMealProps = {
   meal: MealPer100g;
-  onBack: () => void;
+  initialGrams?: number;
+  onSubmit: (grams: number) => Promise<unknown>;
+  onBack?: () => void;
 };
 
 const QUICK_GRAMS = [50, 100, 150, 200];
 
-const SelectMeal = ({ meal, onBack }: SelectMealProps) => {
-  const [searchParams] = useSearchParams();
-  const dayParam = searchParams.get('day') ?? format(new Date(), 'yyyy-MM-dd');
-
-  const [grams, setGrams] = useState<number>(0);
+const SelectMeal = ({
+  meal,
+  initialGrams = 0,
+  onBack,
+  onSubmit,
+}: SelectMealProps) => {
+  const [grams, setGrams] = useState<number>(initialGrams);
 
   const mealMacro: Macro = {
     kcal: meal.kcal_per_100g * (grams / 100),
@@ -30,23 +30,28 @@ const SelectMeal = ({ meal, onBack }: SelectMealProps) => {
     carbs: meal.carbs_per_100g * (grams / 100),
   };
 
-  const { isCreating, addSelectedMeal } = useAddSelectedMeal();
+  const [isSubmitting, setSubmitting] = useState(false);
   const { close } = useModalContext();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSecondary = onBack ?? close;
+  const secondaryLabel = onBack ? 'Back' : 'Close';
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const logMeal: AddLogMeal = {
-      meal_id: meal.id,
-      log_date: dayParam,
-      eaten: false,
-      weight: grams,
-    };
-    addSelectedMeal(logMeal, { onSuccess: close });
+    try {
+      setSubmitting(true);
+      await onSubmit(grams);
+      close();
+    } catch {
+      // mutation rejected → keep modal open so the user can retry
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <div className="relative">
-      {isCreating && (
+      {isSubmitting && (
         <div className="absolute inset-0 z-50 flex items-center justify-center">
           <Spinner className="size-12" />
         </div>
@@ -97,8 +102,8 @@ const SelectMeal = ({ meal, onBack }: SelectMealProps) => {
         <div className="flex items-center justify-between">
           <span className="text-fg-muted">Logging {grams}g to this meal</span>
           <div className="flex gap-2">
-            <Button variant="ghost" type="button" onClick={onBack}>
-              Back
+            <Button variant="ghost" type="button" onClick={handleSecondary}>
+              {secondaryLabel}
             </Button>
             <Button variant="brand" type="submit" form="select-meal">
               Save

@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useDiets } from '@/features/Diet/useDiets';
 import React, { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import type { FullMeal } from '../../types/meal';
 import { countChartMacroData } from '@/utils/helper';
 import MealEditCard from '@/features/Diet/MealEditCard/MealEditCard';
 import ToggleCard from '@/components/shared/ToggleContent/ToggleContent';
@@ -13,7 +12,7 @@ import { format, parse } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { IoIosArrowDown } from 'react-icons/io';
 import AddMeal from '@/features/Diet/AddMeal/AddMeal';
-import type { GroupedMeals } from '@/types/dietPlan';
+import type { GroupedMeals, LoggedMeal } from '@/types/dietPlan';
 
 const ChartMemoized = React.memo(Chart);
 
@@ -51,13 +50,17 @@ const Diet: React.FC = () => {
     if (!selectedDay) return [];
 
     const groupedByName = dietPlan.reduce<GroupedMeals>((acc, item) => {
-      const meal: FullMeal = {
-        name: item.name,
-        weight: item.weight,
-        kcal: item.kcal,
-        protein: item.protein,
-        carbs: item.carbs,
-        fat: item.fat,
+      const meal: LoggedMeal = {
+        logId: item.logId,
+        product: item.product,
+        display: {
+          name: item.name,
+          weight: item.weight,
+          kcal: item.kcal,
+          protein: item.protein,
+          carbs: item.carbs,
+          fat: item.fat,
+        },
       };
 
       if (!acc[item.meal_type]) {
@@ -194,10 +197,12 @@ const Diet: React.FC = () => {
                 <ToggleCard isToggled={openMeals.has(plan.meal_type)}>
                   <CardContent className="flex w-full flex-col gap-6 px-0">
                     {plan.meals.length > 0 ? (
-                      plan.meals.map((m1, index) => (
+                      plan.meals.map((m1) => (
                         <MealEditCard
-                          key={index}
-                          meal={m1}
+                          key={m1.logId}
+                          meal={m1.display}
+                          product={m1.product}
+                          logId={m1.logId}
                           onEdit={(meal) => console.log('Edit:', meal)}
                           onDelete={(id) => console.log('Delete:', id)}
                         />

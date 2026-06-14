@@ -14,9 +14,11 @@ export async function fetchDietPlan(selectedDay: string): Promise<DietPlan[]> {
     .from('meal_logs')
     .select(
       `
+      id,
       log_date,
       weight,
       meals:meal_id (
+        id,
         meal_type,
         name,
         kcal_per_100g,
@@ -53,6 +55,16 @@ export async function fetchDietPlan(selectedDay: string): Promise<DietPlan[]> {
         const fat = (meal?.fat_per_100g ?? 0) * factor;
 
         return {
+          logId: row.id,
+          product: {
+            id: meal?.id ?? '',
+            name: meal?.name ?? '',
+            meal_type: meal?.meal_type ?? '',
+            kcal_per_100g: meal?.kcal_per_100g ?? 0,
+            protein_per_100g: meal?.protein_per_100g ?? 0,
+            carbs_per_100g: meal?.carbs_per_100g ?? 0,
+            fat_per_100g: meal?.fat_per_100g ?? 0,
+          },
           log_date: row.log_date,
           meal_type: meal?.meal_type ?? '',
           name: meal?.name ?? '',
@@ -73,7 +85,6 @@ export async function fetchDietPlan(selectedDay: string): Promise<DietPlan[]> {
         );
       }) ?? [];
 
-  console.log(flat);
   return flat || [];
 }
 
@@ -85,6 +96,22 @@ export async function addNewItemToMeal(newItem: AddLogMeal) {
   if (error) {
     console.error('Meal could not be added');
     throw new Error('Meal could not be added');
+  }
+
+  return data;
+}
+
+export async function updateMealLogWeight(logId: string, weight: number) {
+  const { data, error } = await supabase
+    .from('meal_logs')
+    .update({ weight })
+    .eq('id', logId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Meal could not be updated');
+    throw new Error('Meal could not be updated');
   }
 
   return data;

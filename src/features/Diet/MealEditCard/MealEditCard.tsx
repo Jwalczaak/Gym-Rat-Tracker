@@ -2,23 +2,31 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { FaRegTrashAlt } from 'react-icons/fa';
 import { CiEdit } from 'react-icons/ci';
-import type { FullMeal } from '@/types/meal';
+import type { FullMeal, MealPer100g } from '@/types/meal';
 import React from 'react';
 import Chart from '@/components/shared/ Chart/Chart';
 import { countChartMacroData } from '@/utils/helper';
 import type { DietPlan } from '@/types/dietPlan';
+import Modal from '@/components/shared/Modal/Modal';
+import SelectMeal from '../SelectMeal/SelectMeal';
+import { useUpdateMeal } from '../useUpdateMeal';
 type MealEditCardProps = {
   meal: FullMeal;
+  product: MealPer100g;
+  logId: string;
   onEdit: (meal: DietPlan) => void;
   onDelete: (meal: DietPlan) => void;
 };
 
 const MealEditCard: React.FC<MealEditCardProps> = ({
   meal,
+  product,
+  logId,
   onEdit,
   onDelete,
 }) => {
   const { proteinData, fatData, carbsData } = countChartMacroData(meal);
+  const { updateMeal } = useUpdateMeal();
 
   return (
     <Card className="bg-surface-subtle h-45 w-full">
@@ -50,13 +58,37 @@ const MealEditCard: React.FC<MealEditCardProps> = ({
           </div>
         </div>
         <div className="actions flex gap-x-1">
-          <Button
-            variant="outline"
-            size="icon"
-            className="cursor-pointer rounded-full"
-          >
-            <CiEdit className="size-6" />
-          </Button>
+          <Modal>
+            <Modal.Open opens="meal-edit-form">
+              <Button
+                variant="outline"
+                size="icon"
+                className="cursor-pointer rounded-full"
+              >
+                <CiEdit className="size-6" />
+              </Button>
+            </Modal.Open>
+            <Modal.Window name="meal-edit-form">
+              <Modal.Header>
+                <div className="flex flex-col gap-2">
+                  <div className="flex gap-2 text-lg font-semibold">
+                    <span>Add Meal</span>
+                    <span className="text-brand">Breakfast</span>
+                  </div>
+                  <span className="text-fg-muted">
+                    Find an existing product in your database, or create a new
+                    one
+                  </span>
+                </div>
+              </Modal.Header>
+              <SelectMeal
+                meal={product}
+                initialGrams={meal.weight}
+                onSubmit={(g) => updateMeal({ logId, weight: g })}
+              />
+            </Modal.Window>
+          </Modal>
+
           <Button
             variant="outline"
             size="icon"

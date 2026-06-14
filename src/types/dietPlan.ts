@@ -1,4 +1,10 @@
-import type { FullMeal } from './meal';
+import type { FullMeal, MealPer100g } from './meal';
+
+export type LoggedMeal = {
+  logId: string;
+  product: MealPer100g;
+  display: FullMeal;
+};
 
 export type DietPlanRow = {
   meal_type: string;
@@ -6,10 +12,12 @@ export type DietPlanRow = {
   mealProtein: number;
   mealCarbs: number;
   mealFat: number;
-  meals: FullMeal[];
+  meals: LoggedMeal[];
 };
 
 export type DietPlan = {
+  logId: string;
+  product: MealPer100g;
   log_date: string;
   meal_type: string;
   name: string;

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export function useAddSelectedMeal() {
   const queryClient = useQueryClient();
 
-  const { mutate: addSelectedMeal, isPending: isCreating } = useMutation({
+  const { mutateAsync: addSelectedMeal, isPending: isCreating } = useMutation({
     mutationFn: addNewItemToMeal,
     onSuccess: () => {
       queryClient.invalidateQueries({
