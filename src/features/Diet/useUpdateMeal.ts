@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export function useUpdateMeal() {
   const queryClient = useQueryClient();
 
-  const { mutateAsync: updateMeal, isPending: isUpdating } = useMutation({
+  const { mutateAsync: updateMeal } = useMutation({
     mutationFn: ({ logId, weight }: { logId: string; weight: number }) =>
       updateMealLogWeight(logId, weight),
     onSuccess: () => {
@@ -12,11 +12,11 @@ export function useUpdateMeal() {
         queryKey: ['dietPlan'],
       });
     },
-    onError: (err) => console.error(err.message),
+    // Errors are owned by the caller (SelectMeal's submit catch), so the
+    // rejection isn't handled twice. Keep this hook a pure data wrapper.
   });
 
   return {
-    isUpdating,
     updateMeal,
   };
 }

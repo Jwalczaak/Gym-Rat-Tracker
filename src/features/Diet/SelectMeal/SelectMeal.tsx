@@ -30,7 +30,7 @@ const SelectMeal = ({
     carbs: meal.carbs_per_100g * (grams / 100),
   };
 
-  const [isSubmitting, setSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { close } = useModalContext();
 
   const handleSecondary = onBack ?? close;
@@ -39,13 +39,15 @@ const SelectMeal = ({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      setSubmitting(true);
+      setIsSubmitting(true);
       await onSubmit(grams);
       close();
-    } catch {
-      // mutation rejected → keep modal open so the user can retry
+    } catch (err) {
+      // Single owner of submit errors: keep the modal open so the user can
+      // retry. TODO: surface a toast here once a toast system exists.
+      console.error(err);
     } finally {
-      setSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
