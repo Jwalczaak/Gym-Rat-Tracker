@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "format": "prettier --write .",
     "review": "bash scripts/review.sh",
+    "review:gate": "bash scripts/review-gate.sh",
     "hook:install": "cp scripts/review.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'pre-push hook installed'"
   },
   "dependencies": {
