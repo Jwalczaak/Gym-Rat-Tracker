@@ -14,7 +14,7 @@ type MealEditCardProps = {
   meal: FullMeal;
   product: MealPer100g;
   logId: string;
-  onEdit: (meal: DietPlan) => void;
+  mealType: string;
   onDelete: (meal: DietPlan) => void;
 };
 
@@ -22,7 +22,7 @@ const MealEditCard: React.FC<MealEditCardProps> = ({
   meal,
   product,
   logId,
-  onEdit,
+  mealType,
   onDelete,
 }) => {
   const { proteinData, fatData, carbsData } = countChartMacroData(meal);
@@ -72,8 +72,8 @@ const MealEditCard: React.FC<MealEditCardProps> = ({
               <Modal.Header>
                 <div className="flex flex-col gap-2">
                   <div className="flex gap-2 text-lg font-semibold">
-                    <span>Add Meal</span>
-                    <span className="text-brand">Breakfast</span>
+                    <span>Edit Existing Meal</span>
+                    <span className="text-brand capitalize">{mealType}</span>
                   </div>
                   <span className="text-fg-muted">
                     Find an existing product in your database, or create a new

@@ -53,7 +53,7 @@ const CreateMealForm = () => {
   });
 
   const { isCreating, createMeal } = useCreateMeal();
-  const { addSelectedMeal } = useAddSelectedMeal();
+  const { isEditing, addSelectedMeal } = useAddSelectedMeal();
   const { close } = useModalContext();
 
   const [searchParams] = useSearchParams();
@@ -90,7 +90,7 @@ const CreateMealForm = () => {
   return (
     <>
       <div className="relative p-4">
-        {isCreating && (
+        {(isCreating || isEditing) && (
           <div className="absolute inset-0 z-50 flex items-center justify-center">
             <Spinner className="size-12" />
           </div>

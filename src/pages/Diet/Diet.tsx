@@ -203,7 +203,7 @@ const Diet: React.FC = () => {
                           meal={m1.display}
                           product={m1.product}
                           logId={m1.logId}
-                          onEdit={(meal) => console.log('Edit:', meal)}
+                          mealType={plan.meal_type}
                           onDelete={(id) => console.log('Delete:', id)}
                         />
                       ))

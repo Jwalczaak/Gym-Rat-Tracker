@@ -27,7 +27,7 @@ const AddMeal = () => {
   const { addSelectedMeal } = useAddSelectedMeal();
 
   const param = searchParams.get('day');
-  const dayParam: string = param ?? format(new Date(), 'yyyy-MM-dd');
+  const dayParam = param ?? format(new Date(), 'yyyy-MM-dd');
 
   function handleSelectMeal(meal: MealPer100g) {
     setSelectedMeal(meal);
