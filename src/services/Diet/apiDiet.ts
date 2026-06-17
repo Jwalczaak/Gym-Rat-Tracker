@@ -101,6 +101,22 @@ export async function addNewItemToMeal(newItem: AddLogMeal) {
   return data;
 }
 
+export async function deleteMealLog(logId: string) {
+  const { data, error } = await supabase
+    .from('meal_logs')
+    .delete()
+    .eq('id', logId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Meal could not be deleted');
+    throw new Error('Meal could not be deleted');
+  }
+
+  return data;
+}
+
 export async function updateMealLogWeight(logId: string, weight: number) {
   const { data, error } = await supabase
     .from('meal_logs')

@@ -204,7 +204,6 @@ const Diet: React.FC = () => {
                           product={m1.product}
                           logId={m1.logId}
                           mealType={plan.meal_type}
-                          onDelete={(id) => console.log('Delete:', id)}
                         />
                       ))
                     ) : (

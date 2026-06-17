@@ -10,12 +10,13 @@ import type { DietPlan } from '@/types/dietPlan';
 import Modal from '@/components/shared/Modal/Modal';
 import SelectMeal from '../SelectMeal/SelectMeal';
 import { useUpdateMeal } from '../useUpdateMeal';
+import { useDeleteMeal } from '../useDeleteMeal';
+import { CiTrash } from 'react-icons/ci';
 type MealEditCardProps = {
   meal: FullMeal;
   product: MealPer100g;
   logId: string;
   mealType: string;
-  onDelete: (meal: DietPlan) => void;
 };
 
 const MealEditCard: React.FC<MealEditCardProps> = ({
@@ -23,10 +24,10 @@ const MealEditCard: React.FC<MealEditCardProps> = ({
   product,
   logId,
   mealType,
-  onDelete,
 }) => {
   const { proteinData, fatData, carbsData } = countChartMacroData(meal);
   const { updateMeal } = useUpdateMeal();
+  const { deleteMeal, isDeleting } = useDeleteMeal();
 
   return (
     <Card className="bg-surface-subtle h-45 w-full">
@@ -89,13 +90,63 @@ const MealEditCard: React.FC<MealEditCardProps> = ({
             </Modal.Window>
           </Modal>
 
-          <Button
-            variant="outline"
-            size="icon"
-            className="cursor-pointer rounded-full"
-          >
-            <FaRegTrashAlt className="size-6" />
-          </Button>
+          <Modal>
+            <Modal.Open opens="meal-delete">
+              <Button
+                variant="outline"
+                size="icon"
+                className="cursor-pointer rounded-full"
+              >
+                <FaRegTrashAlt className="size-6" />
+              </Button>
+            </Modal.Open>
+            <Modal.Window name="meal-delete">
+              <Modal.Header>
+                <div className="flex flex-col items-center gap-2">
+                  <div className="rounded-full bg-red-100 p-3">
+                    <CiTrash className="size-8 text-red-600" />
+                  </div>
+                  <span className="text-lg font-semibold">
+                    Delete this meal?
+                  </span>
+                </div>
+              </Modal.Header>
+
+              <div className="px-6 py-4 text-center">
+                <p className="text-fg-muted">
+                  <span className="text-foreground font-semibold">
+                    {meal.name}
+                  </span>{' '}
+                  ({meal.weight}g) will be removed from{' '}
+                  <span className="capitalize">{mealType}</span>. This can't be
+                  undone.
+                </p>
+              </div>
+
+              <Modal.Footer>
+                <div className="flex justify-end gap-2">
+                  <Modal.Close>
+                    <Button
+                      variant="ghost"
+                      type="button"
+                      className="cursor-pointer"
+                    >
+                      Cancel
+                    </Button>
+                  </Modal.Close>
+                  <Button
+                    variant="destructive"
+                    type="button"
+                    className="cursor-pointer"
+                    onClick={() => deleteMeal(logId)}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? 'Deleting…' : 'Delete meal'}
+                  </Button>
+                </div>
+              </Modal.Footer>
+            </Modal.Window>
+          </Modal>
         </div>
       </CardContent>
     </Card>
