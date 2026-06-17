@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 export function useAddSelectedMeal() {
   const queryClient = useQueryClient();
 
-  const { mutateAsync: addSelectedMeal, isPending: isEditing } = useMutation({
+  const { mutateAsync: addSelectedMeal, isPending: isSelecting } = useMutation({
     mutationFn: addNewItemToMeal,
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -15,7 +15,7 @@ export function useAddSelectedMeal() {
     // rejection isn't handled twice. Keep this hook a pure data wrapper.
   });
   return {
-    isEditing,
+    isSelecting,
     addSelectedMeal,
   };
 }

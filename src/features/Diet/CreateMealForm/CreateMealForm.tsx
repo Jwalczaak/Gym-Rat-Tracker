@@ -53,7 +53,7 @@ const CreateMealForm = () => {
   });
 
   const { isCreating, createMeal } = useCreateMeal();
-  const { isEditing, addSelectedMeal } = useAddSelectedMeal();
+  const { isSelecting, addSelectedMeal } = useAddSelectedMeal();
   const { close } = useModalContext();
 
   const [searchParams] = useSearchParams();
@@ -65,7 +65,7 @@ const CreateMealForm = () => {
     createMeal(
       { ...mealFields, meal_type: 'breakfast' },
       {
-        onSuccess: (createdMeal) => {
+        onSuccess: async (createdMeal) => {
           if (!grams) {
             close();
             return;
@@ -77,7 +77,12 @@ const CreateMealForm = () => {
             eaten: false,
             weight: grams,
           };
-          addSelectedMeal(logMeal, { onSuccess: close });
+          try {
+            await addSelectedMeal(logMeal);
+            close();
+          } catch (err) {
+            console.error(err);
+          }
         },
       },
     );
@@ -90,7 +95,7 @@ const CreateMealForm = () => {
   return (
     <>
       <div className="relative p-4">
-        {(isCreating || isEditing) && (
+        {(isCreating || isSelecting) && (
           <div className="absolute inset-0 z-50 flex items-center justify-center">
             <Spinner className="size-12" />
           </div>
