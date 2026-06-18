@@ -53,7 +53,7 @@ Be concise. Structure your response as:
 STATUS: APPROVED or NEEDS REVIEW
 
 BACKLOG (one line per '## Open' item in REVIEW_NOTES.md):
-- RESOLVED — <item>: <where/why it now looks fixed> → tick its box or move to ## Resolved
+- RESOLVED — <item>: <where/why it now looks fixed> → safe to remove its box
 - STILL PRESENT — <item>: <file:line proving it remains>
 
 ISSUES (new findings, only if any):

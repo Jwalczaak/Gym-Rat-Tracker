@@ -11,8 +11,6 @@ export function useAddSelectedMeal() {
         queryKey: ['dietPlan'],
       });
     },
-    // Errors are owned by the caller (SelectMeal's submit catch), so the
-    // rejection isn't handled twice. Keep this hook a pure data wrapper.
   });
   return {
     isSelecting,
