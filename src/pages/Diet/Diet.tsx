@@ -126,7 +126,7 @@ const Diet: React.FC = () => {
                     <div className="flex items-center gap-3">
                       <span className="text-base">{plan.meal_type}</span>
                       <span className="text-muted-foreground text-sm">
-                        {plan.mealKcal} kcal
+                        {Math.round(plan.mealKcal)} kcal
                       </span>
                     </div>
                   </CardTitle>
@@ -163,7 +163,7 @@ const Diet: React.FC = () => {
                             data={macroData.proteinData}
                           />
                           <span className="text-sm font-normal">
-                            {plan.mealProtein}g
+                            {Math.round(plan.mealProtein)}g
                           </span>
                         </div>
 
@@ -175,7 +175,7 @@ const Diet: React.FC = () => {
                             data={macroData.fatData}
                           />
                           <span className="text-sm font-normal">
-                            {plan.mealFat}g
+                            {Math.round(plan.mealFat)}g
                           </span>
                         </div>
 
@@ -187,7 +187,7 @@ const Diet: React.FC = () => {
                             data={macroData.carbsData}
                           />
                           <span className="text-sm font-normal">
-                            {plan.mealCarbs}g
+                            {Math.round(plan.mealCarbs)}g
                           </span>
                         </div>
                       </div>
