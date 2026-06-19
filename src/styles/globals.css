@@ -115,6 +115,15 @@ body {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  /* ── Status / feedback — used by toasts, alerts, badges ──────────────── */
+  --destructive-foreground: oklch(0.985 0 0); /* on red — near-white */
+  --success: oklch(0.59 0.13 162); /* emerald-ish */
+  --success-foreground: oklch(0.985 0 0);
+  --warning: oklch(0.75 0.15 75); /* amber */
+  --warning-foreground: oklch(0.205 0 0); /* dark text on bright amber */
+  --info: oklch(0.58 0.16 250); /* blue */
+  --info-foreground: oklch(0.985 0 0);
 }
 
 .dark {
@@ -157,6 +166,15 @@ body {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  /* Status — lifted lightness for contrast on dark surfaces */
+  --destructive-foreground: oklch(0.985 0 0);
+  --success: oklch(0.7 0.15 162);
+  --success-foreground: oklch(0.205 0 0);
+  --warning: oklch(0.8 0.15 75);
+  --warning-foreground: oklch(0.205 0 0);
+  --info: oklch(0.68 0.16 250);
+  --info-foreground: oklch(0.205 0 0);
 }
 
 /* ─── Static tokens → Tailwind utilities ───────────────────────────────────

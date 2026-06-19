@@ -21,6 +21,7 @@ import { useCreateMeal } from '../useCreateMeal';
 import { useAddSelectedMeal } from '../useAddSelectedMeal';
 import CountedMacro from '../CountedMacro/CountedMacro';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
 
 type FormValues = Omit<MealPer100g, 'id' | 'meal_type'> & { grams: number };
 
@@ -67,6 +68,7 @@ const CreateMealForm = () => {
       {
         onSuccess: async (createdMeal) => {
           if (!grams) {
+            toast.success('Meal created');
             close();
             return;
           }
@@ -81,6 +83,7 @@ const CreateMealForm = () => {
             await addSelectedMeal(logMeal);
             close();
           } catch (err) {
+            toast.error('Meal created, but logging it failed');
             console.error(err);
           }
         },

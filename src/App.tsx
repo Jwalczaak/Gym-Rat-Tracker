@@ -1,4 +1,5 @@
 import './App.css';
+import { Toaster } from './components/ui/sonner';
 
 import { AppRouter } from './routes/AppRouter';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -16,6 +17,7 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools />
       <AppRouter />;
+      <Toaster />
     </QueryClientProvider>
   );
 };

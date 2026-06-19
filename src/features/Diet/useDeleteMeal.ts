@@ -1,5 +1,6 @@
 import { deleteMealLog } from '@/services/Diet/apiDiet';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 export function useDeleteMeal() {
   const queryClient = useQueryClient();
@@ -10,8 +11,10 @@ export function useDeleteMeal() {
       queryClient.invalidateQueries({
         queryKey: ['dietPlan'],
       });
+      toast.success('Meal deleted');
     },
     onError: (err) => {
+      toast.error('Could not delete the meal');
       console.error(err);
     },
   });

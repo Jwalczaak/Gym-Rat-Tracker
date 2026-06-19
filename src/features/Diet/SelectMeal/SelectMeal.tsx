@@ -5,6 +5,7 @@ import CountedMacro from '../CountedMacro/CountedMacro';
 import type { Macro, MealPer100g } from '@/types/meal';
 import { useState } from 'react';
 import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
 
 type SelectMealProps = {
   meal: MealPer100g;
@@ -43,8 +44,7 @@ const SelectMeal = ({
       await onSubmit(grams);
       close();
     } catch (err) {
-      // Single owner of submit errors: keep the modal open so the user can
-      // retry. TODO: surface a toast here once a toast system exists.
+      toast.error('Can not select the meal');
       console.error(err);
     } finally {
       setIsSubmitting(false);
