@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { mapIntervalToWeekDays } from './helper';
+import { countChartMacroData, mapIntervalToWeekDays } from './helper';
+import type { Macro } from '@/types/meal';
 
 describe('mapIntervalToWeekDays', () => {
   it('returns one entry per day in the interval', () => {
@@ -44,5 +45,66 @@ describe('mapIntervalToWeekDays', () => {
       isToday: expect.any(Boolean),
       isWeekend: expect.any(Boolean),
     });
+  });
+});
+
+describe('countChartMacroData', () => {
+  it('correctly sum macros', () => {
+    const macro: Macro = {
+      protein: 20,
+      carbs: 50,
+      fat: 30,
+      kcal: 500,
+    };
+
+    const summerMacro = 100;
+
+    const result = countChartMacroData(macro);
+
+    expect(
+      result.proteinData[0].value +
+        result.fatData[0].value +
+        result.carbsData[0].value,
+    ).toEqual(summerMacro);
+  });
+
+  it('returns the expected shape for each macro data', () => {
+    const macro: Macro = {
+      protein: 20,
+      carbs: 50,
+      fat: 30,
+      kcal: 500,
+    };
+
+    const result = countChartMacroData(macro);
+
+    const macroEntryShape = expect.objectContaining({
+      name: expect.any(String),
+      value: expect.any(Number),
+      fill: expect.any(String),
+    });
+
+    expect(result).toEqual({
+      proteinData: expect.arrayContaining([macroEntryShape]),
+      fatData: expect.arrayContaining([macroEntryShape]),
+      carbsData: expect.arrayContaining([macroEntryShape]),
+    });
+  });
+  it('each macro slice plus its rest equals the total macros', () => {
+    const macro: Macro = { protein: 20, carbs: 50, fat: 30, kcal: 500 };
+    const total = 100; // 20 + 50 + 30
+
+    const result = countChartMacroData(macro);
+
+    expect(result.proteinData[0].value + result.proteinData[1].value).toEqual(
+      total,
+    );
+    expect(result.fatData[0].value + result.fatData[1].value).toEqual(total);
+    expect(result.carbsData[0].value + result.carbsData[1].value).toEqual(
+      total,
+    );
+    expect(result.proteinData[0].value).toEqual(macro.protein);
+    expect(result.fatData[0].value).toEqual(macro.fat);
+    expect(result.carbsData[0].value).toEqual(macro.carbs);
   });
 });

@@ -30,7 +30,7 @@ export type MacroChartData = {
   carbsData: MacroData[];
 };
 
-type MacroData = {
+export type MacroData = {
   name: string;
   value: number;
   fill: string;

@@ -1,7 +1,6 @@
 import type { Macro } from '@/types/meal';
 
 const CountedMacro = ({ macro }: { macro: Macro }) => {
-  console.log(macro);
   return (
     <div className="bg-muted border-input flex h-14 w-full items-center justify-between rounded-md border px-4 py-2">
       <div className="flex gap-2">
