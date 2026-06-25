@@ -9,7 +9,7 @@ import { countChartMacroData } from '@/utils/helper';
 import Modal from '@/components/shared/Modal/Modal';
 import SelectMeal from '../SelectMeal/SelectMeal';
 import { useUpdateMeal } from '../useUpdateMeal';
-import DeleteMealConfirm from './DeleteMealConfirm';
+import DeleteMealConfirm from '../DeleteMealConfirm/DeleteMealConfirm';
 type MealEditCardProps = {
   meal: FullMeal;
   product: MealPer100g;

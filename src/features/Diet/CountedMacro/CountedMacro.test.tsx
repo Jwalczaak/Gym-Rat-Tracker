@@ -9,7 +9,7 @@ const macro: Macro = {
   kcal: 690.1223,
 };
 
-describe('CountedMacro', () => {
+describe('countedMacro', () => {
   it('renders rounded macro values', () => {
     render(<CountedMacro macro={macro} />);
 

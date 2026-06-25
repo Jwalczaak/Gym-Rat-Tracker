@@ -28,3 +28,12 @@ Bypass in an emergency (not recommended during learning):
       local-midnight dates with the numeric constructor: `new Date(2026, 5, 14)`
       (month is 0-indexed). Stable in every timezone and removes the hidden UTC
       coupling. A test that only passes in some timezones is worse than no test.
+- **`mapIntervalToWeekDays` "today" default is untested** — tests only prove
+  `isToday` when `today` is passed explicitly. The production call relies on the
+  default `new Date()`, which no test exercises (and can't, deterministically).
+  Not a bug — the injectable `today` param is the right testable design; tests
+  cover the injectable path, not the real default. → optionally add one
+  assertion that the default path returns the right length, nothing more.
+- **Test name typo + `summerMacro` in `helper.test.ts`** (`:53,61`) — cosmetic:
+  rename the `'correctly sum macros'` test and the `summerMacro` variable to
+  "summed"/"total". Worth fixing while in the file.
