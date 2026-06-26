@@ -60,6 +60,7 @@ const MealEditCard: React.FC<MealEditCardProps> = ({
             <Modal.Open opens="meal-edit-form">
               <Button
                 variant="outline"
+                aria-label="Edit meal"
                 size="icon"
                 className="cursor-pointer rounded-full"
               >
@@ -92,6 +93,7 @@ const MealEditCard: React.FC<MealEditCardProps> = ({
               <Button
                 variant="outline"
                 size="icon"
+                aria-label="Delete meal"
                 className="cursor-pointer rounded-full"
               >
                 <FaRegTrashAlt className="size-6" />

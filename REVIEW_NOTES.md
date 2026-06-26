@@ -14,6 +14,17 @@ Bypass in an emergency (not recommended during learning):
 
 ## Nits
 
+- **`MealEditCard.test.tsx` only asserts rendering, never the spies** — the
+  `updateMealLogWeight` / `vi.mocked()` wiring (with a comment about
+  `.toHaveBeenCalledWith`) is set up but no test exercises it. Dead scaffolding
+  reads like an incomplete test. → either add the interaction test (type weight
+  → click save → assert `updateMealLogWeight` called with the right args) or
+  drop the unused mock wiring until you do.
+- **Leading-space folder ` Chart`** — not introduced by the test diff, but the
+  mock path `'@/components/shared/ Chart/Chart'` only works because the real
+  folder `src/components/shared/ Chart` is misnamed with a leading space. Latent
+  footgun (easy to mistype, breaks on space/case-sensitive tooling). → rename
+  `src/components/shared/ Chart` → `Chart` in a follow-up.
 - **Mutation error-ownership inconsistency in the Diet feature** — edit uses
   `mutateAsync` + component-owned errors; delete uses `mutate` + hook-owned
   `onError`. Both defensible, but pick one convention for mutations here.
