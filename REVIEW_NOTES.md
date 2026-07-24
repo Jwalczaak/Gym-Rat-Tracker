@@ -14,6 +14,10 @@ Bypass in an emergency (not recommended during learning):
 
 ## Nits
 
+- **`MealEditCard.test.tsx:17` — unused `updateMealLogWeight` spy** — the
+  `vi.mocked()` binding is declared but never asserted on. → either write the
+  interaction test (type weight → click save →
+  `expect(updateMealLogWeight).toHaveBeenCalledWith(...)`) or drop line 17.
 - **`MealEditCard.test.tsx` only asserts rendering, never the spies** — the
   `updateMealLogWeight` / `vi.mocked()` wiring (with a comment about
   `.toHaveBeenCalledWith`) is set up but no test exercises it. Dead scaffolding

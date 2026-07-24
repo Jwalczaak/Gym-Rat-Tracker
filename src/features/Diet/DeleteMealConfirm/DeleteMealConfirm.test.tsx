@@ -86,7 +86,7 @@ describe('DeleteMealConfirm', () => {
     expect(deleteMealLog).toHaveBeenCalledWith('log-1');
   });
 
-  it('closes modal after sucessfull delete', async () => {
+  it('closes modal after sucessful delete', async () => {
     const user = userEvent.setup();
     renderMealConfirm();
 

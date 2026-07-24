@@ -15,7 +15,6 @@ vi.mock('@/services/Diet/apiDiet', () => ({
 }));
 
 const updateMealLogWeight = vi.mocked(apiDiet.updateMealLogWeight);
-
 const meal: FullMeal = {
   name: 'Chicken Breast',
   weight: 150,

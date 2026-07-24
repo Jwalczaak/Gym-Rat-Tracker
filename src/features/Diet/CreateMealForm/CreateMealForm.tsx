@@ -51,6 +51,7 @@ function LiveMacro({ control }: { control: Control<FormValues> }) {
 const CreateMealForm = () => {
   const { register, handleSubmit, control, formState } = useForm<FormValues>({
     defaultValues: { grams: 0 },
+    mode: 'onChange',
   });
 
   const { isCreating, createMeal } = useCreateMeal();
@@ -107,7 +108,7 @@ const CreateMealForm = () => {
           <FieldGroup>
             <FieldSet className="flex flex-col gap-5">
               <Field>
-                <FieldLabel htmlFor="product">Product name</FieldLabel>
+                <FieldLabel htmlFor="name">Product name</FieldLabel>
                 <Input
                   id="name"
                   placeholder="e.g. Homemade granol"
@@ -120,7 +121,7 @@ const CreateMealForm = () => {
                 </FieldLegend>
                 <div className="grid grid-cols-4 gap-4">
                   <Field>
-                    <FieldLabel htmlFor="kcal">Kcal</FieldLabel>
+                    <FieldLabel htmlFor="kcal_per_100g">Kcal</FieldLabel>
                     <Input
                       id="kcal_per_100g"
                       type="number"
@@ -132,7 +133,7 @@ const CreateMealForm = () => {
                   </Field>
                   <Field>
                     <FieldLabel
-                      htmlFor="protein"
+                      htmlFor="protein_per_100g"
                       className="text-macro-protein"
                     >
                       Protein
@@ -147,7 +148,7 @@ const CreateMealForm = () => {
                     />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="fat" className="text-macro-fat">
+                    <FieldLabel htmlFor="fat_per_100g" className="text-macro-fat">
                       Fat
                     </FieldLabel>
                     <Input
@@ -160,7 +161,7 @@ const CreateMealForm = () => {
                     />
                   </Field>
                   <Field>
-                    <FieldLabel htmlFor="carbs" className="text-macro-carbs">
+                    <FieldLabel htmlFor="carbs_per_100g" className="text-macro-carbs">
                       Carbs
                     </FieldLabel>
                     <Input
@@ -206,7 +207,7 @@ const CreateMealForm = () => {
               variant="brand"
               type="submit"
               form="create-meal"
-              disabled={isCreating}
+              disabled={isCreating || !formState.isValid}
             >
               Save
             </Button>
