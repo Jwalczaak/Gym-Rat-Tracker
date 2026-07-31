@@ -14,6 +14,16 @@ Bypass in an emergency (not recommended during learning):
 
 ## Nits
 
+- **Label-for fixes forced out by tests are genuine correctness/a11y wins** —
+  `htmlFor="product"→"name"`, `kcal`→`kcal_per_100g`, etc. now point at real
+  input `id`s, so `getByLabelText` resolves and screen readers associate labels
+  correctly. Nothing to do — noting that the tests caught real bugs.
+- **RHF `isValid` Proxy subscription is easy to break** — `disabled={isCreating
+  || !formState.isValid}` with `mode: 'onChange'` is correct, but `isValid`
+  starts `false` before any interaction and RHF only recomputes it because you
+  *read* `formState.isValid` in render (Proxy subscription). Destructuring it
+  into a top-level variable without reading it in render can make the
+  subscription go stale — reading it inline (as now) is the safe idiom.
 - **`MealEditCard.test.tsx:17` — unused `updateMealLogWeight` spy** — the
   `vi.mocked()` binding is declared but never asserted on. → either write the
   interaction test (type weight → click save →
@@ -52,3 +62,17 @@ Bypass in an emergency (not recommended during learning):
 - **Test name typo + `summerMacro` in `helper.test.ts`** (`:53,61`) — cosmetic:
   rename the `'correctly sum macros'` test and the `summerMacro` variable to
   "summed"/"total". Worth fixing while in the file.
+- **`DayKcalSummary` — `countPercentageValue` divides grams by kcal** —
+  `(macroData[key] / macroData.kcal) * 100` mixes units: the numerator is grams,
+  the denominator is calories. For `{protein: 15, kcal: 250}` the bar renders at
+  `6`, which isn't "6% of anything" in a meaningful sense. Decide what the bar is
+  supposed to show (share of total macro grams? calorie contribution via 4/4/9
+  kcal per gram? progress toward a daily target?) *before* writing an assertion
+  for `9.6` — otherwise the test just freezes the current behaviour in place.
+- **`DayKcalSummary` — no guard for `macroData.kcal === 0`** — a day with no
+  logged meals gives `0 / 0 * 100` → `NaN`, which is passed straight into Radix
+  `Progress`. Radix only sets `aria-valuenow` when the value is a valid number,
+  so the bars lose their value attribute and Radix logs an error; the indicator
+  transform becomes `translateX(-NaN%)`. → guard the division (return `0` when
+  `kcal` is falsy) and cover the empty-day case in
+  `DayKcalSummary.test.tsx`.

@@ -86,7 +86,19 @@ const Diet: React.FC = () => {
     return Object.values(groupedByName);
   }, [dietPlan, selectedDay]);
 
-  console.log(groupedPlanByName.map((p) => JSON.stringify(p.meal_type)));
+  const macroPerDay = groupedPlanByName.reduce(
+    (acc, plan) => {
+      const macro = {
+        kcal: acc.kcal + plan.mealKcal,
+        protein: acc.protein + plan.mealProtein,
+        carbs: acc.carbs + plan.mealCarbs,
+        fat: acc.fat + plan.mealFat,
+      };
+      return macro;
+    },
+    { kcal: 0, protein: 0, carbs: 0, fat: 0 },
+  );
+
   return (
     <>
       <div className="flex flex-col gap-10 px-20">
@@ -106,7 +118,7 @@ const Diet: React.FC = () => {
             onSelectDay={handleDateSelect}
           />
           <div>
-            <DayKcalSummary />
+            <DayKcalSummary macroData={macroPerDay} selectedDay={selectedDay} />
           </div>
         </div>
 
