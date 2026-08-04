@@ -2,8 +2,6 @@ import { renderWithClient } from '@/test/test-utils';
 import DeleteMealConfirm from './DeleteMealConfirm';
 import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
-import type { UserEvent } from '@testing-library/user-event';
 import * as apiDiet from '@/services/Diet/apiDiet';
 import { Button } from '@/components/ui/button';
 import Modal from '@/components/shared/Modal/Modal';

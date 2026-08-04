@@ -14,6 +14,20 @@ Bypass in an emergency (not recommended during learning):
 
 ## Nits
 
+- **`SearchMeal` — query errors are silently swallowed** — `useMeals` returns
+  `error`, but `SearchMeal` destructures only `isLoading` and `meals`
+  (`SearchMeal.tsx:21`). When `fetchMeals` rejects, `meals` falls back to `[]`,
+  the spinner disappears, and the user sees an empty list indistinguishable from
+  "no results" — no message, no retry. Decide what a failed search should look
+  like *before* writing the test, otherwise the test just freezes the silent
+  failure in place. → then cover it with `fetchMeals.mockRejectedValue(...)` in
+  `SearchMeal.test.tsx`.
+- **`SearchMeal` — no empty-state UI** — the modal opens with an empty debounced
+  phrase, so `meals: []` is the *first* thing every user sees, plus every
+  no-match search. Today that renders nothing below the input: a search box
+  floating over blank space. → decide on copy ("Start typing to search
+  products" vs. "No products match …" — they're arguably two different states)
+  and add a test for each.
 - **Label-for fixes forced out by tests are genuine correctness/a11y wins** —
   `htmlFor="product"→"name"`, `kcal`→`kcal_per_100g`, etc. now point at real
   input `id`s, so `getByLabelText` resolves and screen readers associate labels
