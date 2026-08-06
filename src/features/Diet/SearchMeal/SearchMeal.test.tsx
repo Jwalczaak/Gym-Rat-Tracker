@@ -97,16 +97,17 @@ describe('SearchMeal', () => {
   it('renders a card per returned meal', async () => {
     const user = userEvent.setup();
 
-    renderSearchMeal();
     fetchMeals.mockResolvedValue([
       makeMeal({ id: '1', name: 'Oatmeal' }),
       makeMeal({ id: '2', name: 'Avocado toasts' }),
     ]);
 
+    renderSearchMeal();
+
     await openModal(user);
 
-    expect(await screen.getByText('Oatmeal')).toBeInTheDocument();
-    expect(await screen.getByText('Avocado toasts')).toBeInTheDocument();
+    expect(screen.getByText('Oatmeal')).toBeInTheDocument();
+    expect(screen.getByText('Avocado toasts')).toBeInTheDocument();
   });
 
   it('refetches with the typed phrase after the debounce', async () => {
