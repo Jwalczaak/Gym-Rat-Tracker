@@ -1,7 +1,7 @@
 import Modal from '@/components/shared/Modal/Modal';
 import { Button } from '@/components/ui/button';
 import { renderWithClient } from '@/test/test-utils';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
 import userEvent, { type UserEvent } from '@testing-library/user-event';
 import { toast } from 'sonner';
 import SelectMeal from './SelectMeal';
@@ -108,46 +108,94 @@ describe('SelectMeal', () => {
 
   describe('secondary action', () => {
     it('shows "Back" and calls onBack without closing the modal', async () => {
-      // TODO: withOnBack: true
-      // - button ma name /back/i
-      // - onBack wywołany raz
-      // - queryModalBody() nadal w dokumencie (close NIE poszło)
+      const { onBack } = renderSelectMeal({ withOnBack: true });
+      const user = userEvent.setup();
+      await openModal(user);
+      const buttonBack = screen.getByRole('button', { name: /back/i });
+      await user.click(buttonBack);
+
+      expect(onBack).toHaveBeenCalledTimes(1);
+      expect(queryModalBody()).toBeInTheDocument();
     });
 
     it('shows "Close" and closes the modal when onBack is not provided', async () => {
-      // TODO: withOnBack: false
-      // - button ma name /close/i
-      // - po kliknięciu queryModalBody() === null
-      // Tu nie masz szpiega na close — zniknięcie treści JEST asercją.
+      renderSelectMeal();
+
+      const user = userEvent.setup();
+      await openModal(user);
+      const buttonCancel = screen.getByRole('button', { name: /close/i });
+      await user.click(buttonCancel);
+
+      expect(queryModalBody()).toBeNull();
     });
   });
 
   describe('submit', () => {
-    it('calls onSubmit with the current grams', async () => {
-      // TODO: otwórz, ustaw gramy (quick button lub wpisz w input
-      // getByLabelText(/quantity in grams/i)), kliknij Save.
-      // expect(onSubmit).toHaveBeenCalledWith(<liczba>)
+    it('submits the value typed into the input', async () => {
+      const user = userEvent.setup();
+      const { onSubmit } = renderSelectMeal({ initialGrams: 100 });
+
+      await openModal(user);
+
+      const quantityInput = screen.getByLabelText(/quantity in grams/i);
+      await user.clear(quantityInput);
+      await user.type(quantityInput, '175');
+
+      await user.click(screen.getByRole('button', { name: /save/i }));
+
+      expect(onSubmit).toHaveBeenCalledWith(175);
     });
 
     it('closes the modal after a successful submit', async () => {
-      // TODO: Save -> await waitFor(() => expect(queryModalBody()).toBeNull())
-      // waitFor jest konieczny: close() dzieje się po awaicie, w mikrotasku.
+      const user = userEvent.setup();
+      renderSelectMeal({ initialGrams: 100 });
+
+      await openModal(user);
+
+      await user.click(screen.getByRole('button', { name: /save/i }));
+
+      expect(queryModalBody()).toBeNull();
     });
 
     it('shows an error toast and keeps the modal open when onSubmit rejects', async () => {
-      // TODO: onSubmit.mockRejectedValue(new Error('boom')) przed openModal
-      // - await waitFor(() => expect(toastError).toHaveBeenCalledWith('Can not select the meal'))
-      // - queryModalBody() nadal w dokumencie
-      // - komponent robi console.error(err) -> rozważ
-      //   vi.spyOn(console, 'error').mockImplementation(() => {}),
-      //   żeby output testów był czysty
+      const user = userEvent.setup();
+      const { onSubmit } = renderSelectMeal({ initialGrams: 100 });
+
+      let rejectSubmit!: (e: Error) => void;
+      onSubmit.mockReturnValue(
+        new Promise<void>((_, reject) => {
+          rejectSubmit = reject;
+        }),
+      );
+
+      await openModal(user);
+      await user.click(screen.getByRole('button', { name: /save/i }));
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+      rejectSubmit(new Error('boom'));
+      await waitFor(() => expect(toastError).toHaveBeenCalled());
     });
 
     it('shows a spinner while onSubmit is in flight', async () => {
-      // TODO: ten sam trik co w SearchMeal — trzymany promise:
-      //   let resolveSubmit!: () => void;
-      //   onSubmit.mockReturnValue(new Promise<void>((r) => { resolveSubmit = r; }));
-      // Save -> getByRole('status') istnieje -> resolveSubmit() -> znika.
+      const user = userEvent.setup();
+      const { onSubmit } = renderSelectMeal({ initialGrams: 100 });
+
+      let resolveSubmit!: () => void;
+      onSubmit.mockReturnValue(
+        new Promise<void>((resolve) => {
+          resolveSubmit = resolve;
+        }),
+      );
+
+      await openModal(user);
+      await user.click(screen.getByRole('button', { name: /save/i }));
+
+      expect(screen.getByRole('status')).toBeInTheDocument();
+
+      resolveSubmit();
+      await waitFor(() => {
+        expect(screen.queryByRole('status')).toBeNull();
+      });
     });
   });
 });

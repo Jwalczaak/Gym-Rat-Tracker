@@ -83,6 +83,20 @@ Bypass in an emergency (not recommended during learning):
   supposed to show (share of total macro grams? calorie contribution via 4/4/9
   kcal per gram? progress toward a daily target?) *before* writing an assertion
   for `9.6` — otherwise the test just freezes the current behaviour in place.
+- **`SearchMeal` test fix is a clean-up, not a behaviour change** (commit
+  `859c8db`) — `fetchMeals.mockResolvedValue(...)` now runs *before*
+  `renderSearchMeal()`, which it must: the mock has to exist by the time the
+  query fires. Dropping `await screen.getByText(...)` removed a no-op —
+  `getByText` returns synchronously and throws immediately when absent, so the
+  `await` never bought retry semantics (that's `findBy*`). Nothing to do.
+- **`SelectMeal.test.tsx` is intentional scaffolding** (commit `859c8db`) — five
+  test bodies are empty TODOs left to fill in. The wiring itself is sound:
+  `vi.fn<(grams: number) => Promise<unknown>>()` types the submit spy, the
+  `Partial<MealPer100g>` factory keeps fixtures overridable, and `withOnBack`
+  flips `onBack` between a spy and `undefined` so both the "Back" and "Close"
+  branches of `onBack ?? close` get exercised. → nothing to change until the
+  bodies are written; consider `it.todo` so the empty cases report as skipped
+  rather than passing.
 - **`DayKcalSummary` — no guard for `macroData.kcal === 0`** — a day with no
   logged meals gives `0 / 0 * 100` → `NaN`, which is passed straight into Radix
   `Progress`. Radix only sets `aria-valuenow` when the value is a valid number,
