@@ -23,6 +23,15 @@ dist-ssr
 *.sln
 *.sw?
 
-# Claude Code local tooling
-.claude/mcp.json
+# Secrets — note: .env is currently still TRACKED, see TODO.md
+.env
+.env.*
+!.env.example
+
+# Supabase CLI cache — migrations/ and config.toml ARE tracked
+supabase/.temp/
+supabase/.branches/
+
+# Claude Code — settings.json, commands/, skills/ and mcp.json are shared
+.claude/settings.local.json
 .playwright-mcp/
