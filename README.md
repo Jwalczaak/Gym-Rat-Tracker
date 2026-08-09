@@ -1,76 +1,53 @@
-# React + TypeScript + Vite
+# Gym Rat Tracker
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Workout and diet tracking app — log meals against daily macro targets, track training sessions across a week.
 
-Currently, two official plugins are available:
+**Stack:** React 19 (React Compiler enabled) · TypeScript · Vite · Supabase · TanStack Query · react-hook-form · Tailwind v4 + shadcn/Radix · Vitest + Testing Library
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Setup
 
-## React Compiler
-
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
-
-Note: This will impact Vite dev & build performances.
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+cp .env.example .env   # fill in your Supabase project URL + anon key
+npm run dev            # http://localhost:5173
+npm run hook:install   # installs the pre-push gate
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Scripts
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Script | Does |
+| --- | --- |
+| `npm run dev` | Vite dev server |
+| `npm run typecheck` | `tsc -b --noEmit` |
+| `npm run lint` / `lint:fix` | ESLint |
+| `npm test` / `test:run` | Vitest, watch / single run |
+| `npm run verify` | typecheck + lint + tests — the pre-push gate |
+| `npm run build` | Production build |
+| `npm run format` | Prettier |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project layout
+
 ```
-# Gym-Rat-Tracker
+src/
+  components/ui/        shadcn primitives (generated)
+  components/shared/    app-wide components
+  features/<Domain>/    feature components + colocated tests
+  services/             Supabase client and per-domain API modules
+  hooks/  routes/  utils/  types/  lib/  test/
+```
+
+`@/` resolves to `src/`.
+
+## Pre-push gate
+
+`scripts/pre-push.sh` runs typecheck, lint and tests before every push. Bypass with `SKIP_VERIFY=1 git push`. Re-install after a fresh clone with `npm run hook:install`.
+
+## Working with Claude Code
+
+Project configuration is committed under `.claude/`:
+
+- `CLAUDE.md` — stack, conventions, and the working agreement
+- `.claude/skills/feature` — the plan-first iteration loop for feature work
+- `/commit` — stage, summarize, and commit
+
+Known issues and follow-ups live in [TODO.md](TODO.md).

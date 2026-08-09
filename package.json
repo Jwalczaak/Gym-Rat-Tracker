@@ -6,14 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "typecheck": "tsc -b --noEmit",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "preview": "vite preview",
     "format": "prettier --write .",
-    "review": "bash scripts/review.sh",
     "test": "vitest",
     "test:run": "vitest run",
-    "review:gate": "bash scripts/review-gate.sh",
-    "hook:install": "cp scripts/review.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'pre-push hook installed'"
+    "verify": "npm run typecheck && npm run lint && npm run test:run",
+    "db:pull": "supabase db pull",
+    "db:types": "supabase gen types typescript --linked > src/types/database.types.ts",
+    "db:sync": "npm run db:pull && npm run db:types",
+    "hook:install": "cp scripts/pre-push.sh .git/hooks/pre-push && chmod +x .git/hooks/pre-push && echo 'pre-push hook installed'"
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

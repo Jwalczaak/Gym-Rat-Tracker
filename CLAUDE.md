@@ -1,65 +1,92 @@
-# Claude Code — Learning Context
+# Gym Rat Tracker
 
-## Who I am
+Workout + diet tracking app. React 19, TypeScript, Vite, Supabase, TanStack Query, Tailwind v4 + shadcn/Radix.
 
-developer (experienced) learning React through this project. I know TypeScript, Node.js, React, databases and understand frontend architecture well.
+## Commands
 
-## My learning goal
+| Task | Command |
+| --- | --- |
+| Dev server | `npm run dev` (http://localhost:5173) |
+| Typecheck | `npm run typecheck` |
+| Lint | `npm run lint` |
+| Tests (watch) | `npm test` |
+| Tests (once) | `npm run test:run` |
+| Full gate | `npm run verify` — typecheck + lint + tests, same as pre-push |
+| Build | `npm run build` |
 
-I want to _understand_ React, not just have working code. This project is a gym tracker app and serves as my React learning ground. Every task is an opportunity to build the right mental model.
+`npm run verify` must pass before any commit is considered done.
 
-### Explain before generating
+## Layout
 
-Before writing code, explain the React concept at play. If its possible explain how thinks works behind the scene Then show the code. Assume that I am mid/senior developer. You can provide me advanced context if it needed
+```
+src/
+  components/ui/       shadcn primitives — generated, don't hand-edit
+  components/shared/   app-wide reusable components (Modal, Header, WeekCarousel, …)
+  features/<Domain>/<Feature>/  feature components, colocated with their .test.tsx
+  services/            Supabase client + per-domain API modules (apiDiet.ts, ApiMeal.ts)
+  hooks/               cross-feature hooks (useDebounce, useOutsideClick)
+  routes/              AppRouter, protectedRoute, paths.ts
+  utils/  types/  lib/  config/  styles/
+  test/                setup.ts, test-utils.tsx (render with providers)
+```
 
-### Teach tradeoffs, not just answers
+`@/` aliases `src/`.
 
-When there are multiple valid approaches, explain the tradeoffs. Don't just pick one silently. I want to develop judgment, not dependency.
+## Conventions
 
-### Leave room for me
+- **Data access**: components never call Supabase directly. `services/<Domain>/api*.ts` owns the query; a hook wraps it in TanStack Query; the component consumes the hook.
+- **Feature folders**: one folder per feature, component + test colocated. Split a component when it owns more than one concern, not by line count.
+- **Routes**: add paths to `routes/paths.ts`, never inline string literals.
+- **Forms**: react-hook-form. Read `formState.isValid` inline in render — destructuring it to a variable can break RHF's Proxy subscription.
+- **Mutations**: pick one error-ownership convention per feature — either `mutateAsync` + component-owned error handling, or `mutate` + hook-owned `onError`. Don't mix within a domain. (The Diet feature currently mixes; see [TODO.md](TODO.md).)
+- **React Compiler is on.** Don't add `useMemo`/`useCallback` for referential-stability micro-optimisation; the compiler handles it. Use them only when a dependency identity is semantically required.
+- **Dates**: construct with the numeric constructor (`new Date(2026, 5, 14)`), not `new Date('2026-06-14')` — the string form parses as UTC and shifts the calendar day in negative-offset timezones.
 
-For non-trivial tasks, give me structure with TODOs and explain what each TODO should do — let me fill in the logic. Only write full implementations when I explicitly ask or when it's boilerplate with nothing to learn.
+## Schema
 
-### Review my code
+The schema is authored in the hosted Supabase project (dashboard/SQL editor), not in local migrations. It is mirrored into the repo so it can be read, diffed, and typechecked:
 
-When I share code I wrote, treat it as a review. Tell me:
+- `supabase/migrations/` — SQL pulled from remote via `npm run db:pull`. **This is the ground truth for anything the TypeScript types can't express**: RLS policies, constraints, defaults, foreign keys, indexes. Read it before writing a query.
+- `src/types/database.types.ts` — **generated, never hand-edit**. Regenerate with `npm run db:types`.
+- `npm run db:sync` does both.
 
-- Is the React thinking correct?
-- Is there a simpler/more idiomatic way?
-- What would a React developer notice?
-- Should I divide something for smaller components?
+**After changing any table in the dashboard, run `npm run db:sync` before asking for code.** Otherwise the types are stale and every query written against them is wrong in a way nothing catches.
 
-### Short explanations first
+Once synced, `npm run typecheck` is the drift detector: a renamed or re-typed column breaks at every call site. Treat that error list as the migration checklist.
 
-Lead with a 2-3 sentence explanation. I can ask for more depth. Don't write essays unprompted.
+## Design
 
-## Project context
+There is a Claude design-system project for this app — **"Gym Rat Tracker Design System"**, `projectId 9f7a7d2b-ccdb-4489-80fa-3ebe6859dd45`. Read it with the `DesignSync` tool (`list_files`, `get_file`).
 
-- **App:** Gym Rat Tracker — workout tracking app
-- **Stack:** React, TypeScript, Vite, Supabase
-- **Goal:** Functional app AND React learning vehicle
+What's in it:
 
-## Pre-push review flow
+- `colors_and_type.css` — the upstream token source
+- `preview/*.html` — 20 spec cards (colors, type, spacing, radius, elevation, buttons, cards, fields, meal-card, macro-donut, sidebar, toggle)
+- `ui_kits/web-app/*.jsx` — a React kit with **designed versions of screens that are still stubs here**: Home dashboard, Training (session, sets tables, weekly volume, history), Settings, Login
+- `README.md` — visual foundations, content/tone rules, and an explicit "things to not do" list
 
-A Claude Code review runs automatically before every `git push` via `.git/hooks/pre-push`.
+**It was reverse-engineered from this repo on 2026-08-08, so it is a snapshot.** It is authoritative for *visual language*; it is **not** authoritative about the current state of the code, and it records some repo defects as if they were design (the Vite template favicon, the `Logo` text placeholder, a `Poppins` font-family that isn't installed). Verify against `src/` before treating any claim about the codebase as true.
 
-The review checks for:
+The kit is presentational only — no Supabase, no react-query, `conic-gradient` instead of recharts, a plain grid instead of embla. Take layout and visual decisions from it; the real data path is yours to design.
 
-- React anti-patterns
-- TypeScript issues
-- Obvious bugs
+Tokens live in `src/styles/globals.css` — brand ramps, semantic shortcuts (`--fg`, `--surface`, `--line`), macro colors, shadows. Dark mode is a class swap on `<html>`. When the design system introduces a token `globals.css` lacks, add it there first; never inline the value.
 
-**Manual review:** `npm run review`
-**Re-install hook after fresh clone:** `npm run hook:install`
-**Skip in emergencies:** `SKIP_REVIEW=1 git push` _(not recommended during learning)_
+**Components must not contain raw color, spacing, or shadow values.** No `#7c3aed`, no `bg-violet-600`. Use the semantic token. If a change needs a value no token expresses, propose the token first and wait — don't inline it. Token vocabulary is a decision, not an implementation detail.
 
-The hook script lives in `scripts/review.sh` and is version-controlled — edit it to change what Claude focuses on.
+Iterate at the token/primitive layer, not per screen. A change that has to be repeated across three components is a missing token.
 
----
+## Testing
 
-## What NOT to do
+Vitest + Testing Library, jsdom, globals enabled (no `import { describe }`). Render via `src/test/test-utils.tsx` so providers are wired.
 
-- Don't generate large blocks of code without explanation
-- Don't silently pick the "best" approach — tell me why
-- Don't fix bugs for me without first asking what I think the bug is
-- Don't skip the "why" to save space
+Query by accessible role/label, not test ids. `getBy*` throws synchronously — use `findBy*` when you actually need to wait. Mock at the service boundary (`vi.mock` the `api*.ts` module), not the Supabase client.
+
+Don't leave empty test bodies — use `it.todo` so they report as skipped instead of passing.
+
+## Working agreement
+
+1. **Plan before code.** For anything beyond a one-file change, use plan mode and get the plan approved first. Design decisions get reviewed as prose, not as a 300-line diff.
+2. **One vertical slice per commit.** A slice is service → hook → component → test, working end to end. Not "all the services, then all the components".
+3. **Tests are the verification.** `npm run verify` must be green. Since nothing drives the real browser, the test suite has to carry that weight: every feature needs coverage of its loading, empty, and error states — not just the happy path. An untested empty state is an unverified one.
+4. **State assumptions out loud.** If a requirement is ambiguous, say which reading you picked and why — don't silently choose.
+5. **Findings go to [TODO.md](TODO.md)**, not into scope creep. Fix what was asked; log what you noticed.
