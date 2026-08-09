@@ -55,7 +55,7 @@ export function DatePicker({
         className="w-full"
       >
         <CarouselContent className="h-full items-center">
-          {mappedWeekDays.map((day, index) => (
+          {mappedWeekDays.map((day) => (
             <CarouselItem
               key={day.date}
               className="basis-1/2 pl-4 lg:basis-1/7"

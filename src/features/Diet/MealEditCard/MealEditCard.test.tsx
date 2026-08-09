@@ -14,7 +14,8 @@ vi.mock('@/services/Diet/apiDiet', () => ({
   deleteMealLog: vi.fn().mockResolvedValue(undefined),
 }));
 
-const updateMealLogWeight = vi.mocked(apiDiet.updateMealLogWeight);
+// TODO: assert on this once the weight-save interaction test is written (see TODO.md)
+void vi.mocked(apiDiet.updateMealLogWeight);
 const meal: FullMeal = {
   name: 'Chicken Breast',
   weight: 150,
